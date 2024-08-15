@@ -1,0 +1,143 @@
+<div class="container-fluid bg-light">
+  <form [formGroup]="stepTwoForm" (ngSubmit)="onSubmit()" class="p-5">
+    <div class="row">
+      <div class="col-md-6">
+        <label class="fw-bold">Mileage: </label><span class="text-danger"> *</span>
+        <input type="text" formControlName="mileage" [value]="mileage" class="form-control w-50 mt-2">
+        <div *ngIf="mileage?.invalid && (mileage?.dirty || mileage?.touched)" class="alert alert-danger mt-1 d-block w-50">
+          <div *ngIf="mileage?.errors?.['required'] || mileage?.errors?.['notOnlyWhitespace']">
+            Mile age is required
+          </div>
+          <div *ngIf="mileage?.errors?.['pattern']">
+            Mile age is number
+          </div>
+        </div>
+        <label class="mt-3 fw-bold">Address: </label><span class="text-danger"> *</span>
+        <div class="d-flex">
+          <input class="form-control w-75" type="search" placeholder="Search for an address" aria-label="Search">
+          <i class="bi bi-search" id="searchButton"></i>
+        </div>
+        <select formControlName="city" class="form-select w-75 mt-4">
+          <option *ngFor="let city of cities" [value]="city.cityProvinceCode">{{ city.cityProvince }}</option>
+        </select>
+
+        <select formControlName="district" class="form-select w-75 mt-4">
+          <option *ngFor="let district of districts" [value]="district.districtCode">{{ district.district }}</option>
+        </select>
+
+        <select formControlName="ward" class="form-select w-75 mt-4">
+          <option *ngFor="let ward of wards" [value]="ward.wardCode">{{ ward.ward }}</option>
+        </select>
+        <input formControlName="houseNumber" type="text" class="form-control w-75 mt-4" placeholder="House number/ street">
+        <div *ngIf="houseNumber?.invalid && (houseNumber?.dirty || houseNumber?.touched)" class="alert alert-danger mt-1 d-block w-75">
+          <div *ngIf="houseNumber?.errors?.['required'] || houseNumber?.errors?.['notOnlyWhitespace']">
+            House Number is required
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="fw-bold">Fuel consumption: </label>
+        <div class="d-flex align-items-center">
+          <input formControlName="fuelConsumption" [value]="fuelConsumption" type="text" class="form-control w-25">
+          <p class="ms-3 fs-5 mt-4">liter/100 km</p>
+        </div>
+        <div *ngIf="fuelConsumption?.invalid && (fuelConsumption?.dirty || fuelConsumption?.touched)" class="alert alert-danger mt-1 d-block w-50">
+          <div *ngIf="fuelConsumption?.errors?.['required'] || fuelConsumption?.errors?.['notOnlyWhitespace']">
+            Fuel consumption is required
+          </div>
+          <div *ngIf="fuelConsumption?.errors?.['pattern']">
+            Fuel consumption is number
+          </div>
+        </div>
+        <label class="fw-bold">Description: </label>
+        <textarea formControlName="description" [value]="description"  class="form-control" rows="6" ></textarea>
+      </div>
+    </div>
+    <div formGroupName="additionalFunctions" class="row justify-content-between">
+      <h5 class="mb-5 mt-3 mt-5">Additional functions: </h5>
+      <div class="d-flex justify-content-between w-100">
+        <div class="col-md-4 bg-white py-3">
+          <div *ngFor="let func of additionalFunctions.slice(0, 3)" class="row mb-2">
+            <div class="col d-flex justify-content-center">
+              <i [ngClass]="func.icon"></i>
+            </div>
+            <div class="col d-flex justify-content-center">
+              <p class="mb-0">{{ func.name }}</p>
+            </div>
+            <div class="col d-flex justify-content-center">
+              <input type="checkbox" [formControlName]="func.value" [value]="func.value" (change)="onCheckboxChange($event)">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 bg-white py-3 mx-3">
+          <div *ngFor="let func of additionalFunctions.slice(3, 6)" class="row mb-2">
+            <div class="col d-flex justify-content-center">
+              <i [ngClass]="func.icon"></i>
+            </div>
+            <div class="col d-flex justify-content-center">
+              <p class="mb-0">{{ func.name }}</p>
+            </div>
+            <div class="col d-flex justify-content-center">
+              <input type="checkbox" [formControlName]="func.value" [value]="func.value" (change)="onCheckboxChange($event)">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 bg-white py-3">
+          <div *ngFor="let func of additionalFunctions.slice(6, 8)" class="row mb-2">
+            <div class="col d-flex justify-content-center">
+              <i [ngClass]="func.icon"></i>
+            </div>
+            <div class="col d-flex justify-content-center">
+              <p class="mb-0">{{ func.name }}</p>
+            </div>
+            <div class="col d-flex justify-content-center">
+              <input type="checkbox" [formControlName]="func.value" [value]="func.value" (change)="onCheckboxChange($event)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <p class="fw-bold">Front</p>
+        <app-drop-zone formArrayName="front" [allowedFileTypes]="fileTypes" (onFileDropped)="handleFileSelection($event, 'front')" class="w-75 ms-5" ngDefaultControl></app-drop-zone>
+        <div *ngIf="front?.invalid && (front?.dirty || front?.touched)" class="alert alert-danger mt-1 d-block w-75">
+          <div *ngIf="front?.errors?.['required']">
+            Front image is required
+          </div>
+        </div>
+        <p class="fw-bold">Left</p>
+        <app-drop-zone formArrayName="left" [allowedFileTypes]="fileTypes" (onFileDropped)="handleFileSelection($event, 'left')" class="w-75 ms-5" ngDefaultControl></app-drop-zone>
+        <div *ngIf="left?.invalid && (left?.dirty || left?.touched)" class="alert alert-danger mt-1 d-block w-75">
+          <div *ngIf="left?.errors?.['required']">
+            Left image is required
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <p class="fw-bold">Back</p>
+        <app-drop-zone formArrayName="back" [allowedFileTypes]="fileTypes" (onFileDropped)="handleFileSelection($event, 'back')" class="w-75 ms-5" ngDefaultControl></app-drop-zone>
+        <div *ngIf="back?.invalid && (back?.dirty || back?.touched)" class="alert alert-danger mt-1 d-block w-75">
+          <div *ngIf="back?.errors?.['required']">
+            Back image is required
+          </div>
+        </div>
+        <p class="fw-bold">Right</p>
+        <app-drop-zone formArrayName="right" [allowedFileTypes]="fileTypes" (onFileDropped)="handleFileSelection($event, 'right')" class="w-75 ms-5" ngDefaultControl></app-drop-zone>
+        <div *ngIf="right?.invalid && (right?.dirty || right?.touched)" class="alert alert-danger mt-1 d-block w-75">
+          <div *ngIf="right?.errors?.['required']">
+            Right image is required
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>Please include full 4 images of your vehicle</p>
+    <p>File type: .jpg , .jpeg , .png, .gif</p>
+    <div class="d-flex justify-content-center p-5">
+      <button (click)="navigate('/car-owner')" class="btn btn-link me-3">Cancel</button>
+      <button type="submit"  class="btn btn-primary">Next</button>
+    </div>
+  </form>
+</div>
+
+

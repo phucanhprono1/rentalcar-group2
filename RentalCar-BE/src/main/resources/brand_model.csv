@@ -1,0 +1,376 @@
+id,brand,model
+1,Acura,ILX
+2,Acura,MDX
+3,Acura,MDX Sport Hybrid
+4,Acura,NSX
+5,Acura,RDX
+6,Acura,RLX
+7,Acura,RLX Sport Hybrid
+8,Acura,TLX
+9,Alfa Romeo,4C Spider
+10,Alfa Romeo,Giulia
+11,Alfa Romeo,Stelvio
+12,Audi,A3
+13,Audi,A4
+14,Audi,A5
+15,Audi,A6
+16,Audi,A6 allroad
+17,Audi,A7
+18,Audi,Q3
+19,Audi,Q5
+20,Audi,Q7
+21,Audi,Q8
+22,Audi,R8
+23,Audi,S4
+24,Audi,S8
+25,Audi,SQ5
+26,Audi,TT
+27,BMW,2 Series
+28,BMW,3 Series
+29,BMW,4 Series
+30,BMW,5 Series
+31,BMW,7 Series
+32,BMW,8 Series
+33,BMW,M2
+34,BMW,X1
+35,BMW,X2
+36,BMW,X3
+37,BMW,X3 M
+38,BMW,X4
+39,BMW,X5
+40,BMW,X6
+41,BMW,X7
+42,BMW,Z4
+43,Buick,Enclave
+44,Buick,Encore
+45,Buick,Encore GX
+46,Buick,Envision
+47,Buick,Regal Sportback
+48,Buick,Regal TourX
+49,Cadillac,CT4
+50,Cadillac,CT5
+51,Cadillac,CT6
+52,Cadillac,CT6-V
+53,Cadillac,Escalade
+54,Cadillac,Escalade ESV
+55,Cadillac,XT4
+56,Cadillac,XT5
+57,Cadillac,XT6
+58,Chevrolet,Blazer
+59,Chevrolet,Bolt EV
+60,Chevrolet,Camaro
+61,Chevrolet,Colorado Crew Cab
+62,Chevrolet,Colorado Extended Cab
+63,Chevrolet,Corvette
+64,Chevrolet,Equinox
+65,Chevrolet,Express 2500 Cargo
+66,Chevrolet,Express 3500 Cargo
+67,Chevrolet,Impala
+68,Chevrolet,Malibu
+69,Chevrolet,Silverado 1500 Crew Cab
+70,Chevrolet,Silverado 1500 Double Cab
+71,Chevrolet,Silverado 1500 Regular Cab
+72,Chevrolet,Silverado 2500 HD Crew Cab
+73,Chevrolet,Silverado 2500 HD Double Cab
+74,Chevrolet,Silverado 3500 HD Crew Cab
+75,Chevrolet,Sonic
+76,Chevrolet,Spark
+77,Chevrolet,Suburban
+78,Chevrolet,Tahoe
+79,Chevrolet,Traverse
+80,Chevrolet,Trax
+81,Chrysler,300
+82,Chrysler,Pacifica
+83,Chrysler,Pacifica Hybrid
+84,Chrysler,Voyager
+85,Dodge,Challenger
+86,Dodge,Charger
+87,Dodge,Durango
+88,Dodge,Grand Caravan Passenger
+89,Dodge,Journey
+90,FIAT,124 Spider
+91,FIAT,500L
+92,FIAT,500X
+93,Ford,EcoSport
+94,Ford,Edge
+95,Ford,Escape
+96,Ford,Expedition
+97,Ford,Expedition MAX
+98,Ford,Explorer
+99,Ford,F150 Regular Cab
+100,Ford,F150 Super Cab
+101,Ford,F150 SuperCrew Cab
+102,Ford,F250 Super Duty Crew Cab
+103,Ford,F250 Super Duty Regular Cab
+104,Ford,F250 Super Duty Super Cab
+105,Ford,F350 Super Duty Crew Cab
+106,Ford,F350 Super Duty Super Cab
+107,Ford,F450 Super Duty Crew Cab
+108,Ford,Fusion
+109,Ford,Fusion Plug-in Hybrid
+110,Ford,Mustang
+111,Ford,Ranger SuperCab
+112,Ford,Ranger SuperCrew
+113,Ford,Transit 250 Cargo Van
+114,Ford,Transit 350 Passenger Van
+115,Ford,Transit Connect Cargo Van
+116,Ford,Transit Connect Passenger Wagon
+117,Freightliner,Sprinter 1500 Cargo
+118,Freightliner,Sprinter 1500 Passenger
+119,Freightliner,Sprinter 2500 Cargo
+120,Freightliner,Sprinter 2500 Crew
+121,Freightliner,Sprinter 2500 Passenger
+122,Freightliner,Sprinter 3500 Cargo
+123,Freightliner,Sprinter 3500 Crew
+124,Freightliner,Sprinter 3500 XD Crew
+125,Freightliner,Sprinter 3500XD Cargo
+126,Freightliner,Sprinter 4500 Cargo
+127,Freightliner,Sprinter 4500 Crew
+128,Genesis,G70
+129,Genesis,G80
+130,Genesis,G90
+131,GMC,Acadia
+132,GMC,Canyon Crew Cab
+133,GMC,Sierra 1500 Crew Cab
+134,GMC,Sierra 1500 Double Cab
+135,GMC,Sierra 1500 Regular Cab
+136,GMC,Sierra 2500 HD Crew Cab
+137,GMC,Sierra 3500 HD Crew Cab
+138,GMC,Terrain
+139,GMC,Yukon
+140,GMC,Yukon XL
+141,Honda,Accord
+142,Honda,Accord Hybrid
+143,Honda,Civic
+144,Honda,Civic Type R
+145,Honda,Clarity Fuel Cell
+146,Honda,Clarity Plug-in Hybrid
+147,Honda,CR-V
+148,Honda,CR-V Hybrid
+149,Honda,Fit
+150,Honda,HR-V
+151,Honda,Insight
+152,Honda,Odyssey
+153,Honda,Passport
+154,Honda,Pilot
+155,Honda,Ridgeline
+156,Hyundai,Accent
+157,Hyundai,Elantra
+158,Hyundai,Elantra GT
+159,Hyundai,Ioniq Electric
+160,Hyundai,Ioniq Hybrid
+161,Hyundai,Ioniq Plug-in Hybrid
+162,Hyundai,Kona
+163,Hyundai,Kona Electric
+164,Hyundai,NEXO
+165,Hyundai,Palisade
+166,Hyundai,Santa Fe
+167,Hyundai,Sonata
+168,Hyundai,Sonata Hybrid
+169,Hyundai,Tucson
+170,Hyundai,Veloster
+171,Hyundai,Venue
+172,INFINITI,Q50
+173,INFINITI,Q60
+174,INFINITI,QX50
+175,INFINITI,QX60
+176,INFINITI,QX80
+177,Jaguar,E-PACE
+178,Jaguar,F-PACE
+179,Jaguar,F-TYPE
+180,Jaguar,I-PACE
+181,Jaguar,XE
+182,Jaguar,XF
+183,Jeep,Cherokee
+184,Jeep,Compass
+185,Jeep,Gladiator
+186,Jeep,Grand Cherokee
+187,Jeep,Renegade
+188,Jeep,Wrangler
+189,Jeep,Wrangler Unlimited
+190,Kia,Cadenza
+191,Kia,Forte
+192,Kia,K900
+193,Kia,Niro
+194,Kia,Niro EV
+195,Kia,Niro Plug-in Hybrid
+196,Kia,Optima
+197,Kia,Optima Hybrid
+198,Kia,Optima Plug-in Hybrid
+199,Kia,Rio
+200,Kia,Sedona
+201,Kia,Sorento
+202,Kia,Soul
+203,Kia,Sportage
+204,Kia,Stinger
+205,Kia,Telluride
+206,Land Rover,Defender 110
+207,Land Rover,Defender 90
+208,Land Rover,Discovery
+209,Land Rover,Discovery Sport
+210,Land Rover,Range Rover
+211,Land Rover,Range Rover Evoque
+212,Land Rover,Range Rover Sport
+213,Land Rover,Range Rover Velar
+214,Lexus,ES
+215,Lexus,GS
+216,Lexus,GX
+217,Lexus,IS
+218,Lexus,LC
+219,Lexus,LS
+220,Lexus,LX
+221,Lexus,NX
+222,Lexus,RC
+223,Lexus,RX
+224,Lexus,UX
+225,Lincoln,Aviator
+226,Lincoln,Continental
+227,Lincoln,Corsair
+228,Lincoln,MKZ
+229,Lincoln,Nautilus
+230,Lincoln,Navigator
+231,Lincoln,Navigator L
+232,MAZDA,CX-3
+233,MAZDA,CX-30
+234,MAZDA,CX-5
+235,MAZDA,CX-9
+236,MAZDA,MAZDA3
+237,MAZDA,MAZDA6
+238,MAZDA,MX-5 Miata
+239,MAZDA,MX-5 Miata RF
+240,Mercedes-Benz,A-Class
+241,Mercedes-Benz,C-Class
+242,Mercedes-Benz,CLA
+243,Mercedes-Benz,CLS
+244,Mercedes-Benz,E-Class
+245,Mercedes-Benz,G-Class
+246,Mercedes-Benz,GLA
+247,Mercedes-Benz,GLB
+248,Mercedes-Benz,GLC
+249,Mercedes-Benz,GLE
+250,Mercedes-Benz,GLS
+251,Mercedes-Benz,Mercedes-AMG A-Class
+252,Mercedes-Benz,Mercedes-AMG C-Class
+253,Mercedes-Benz,Mercedes-AMG CLS
+254,Mercedes-Benz,Mercedes-AMG GLC
+255,Mercedes-Benz,Mercedes-AMG GLC Coupe
+256,Mercedes-Benz,Metris WORKER Cargo
+257,Mercedes-Benz,Metris WORKER Passenger
+258,Mercedes-Benz,S-Class
+259,Mercedes-Benz,SLC
+260,Mercedes-Benz,Sprinter 1500 Cargo
+261,Mercedes-Benz,Sprinter 1500 Passenger
+262,Mercedes-Benz,Sprinter 2500 Cargo
+263,Mercedes-Benz,Sprinter 2500 Crew
+264,Mercedes-Benz,Sprinter 2500 Passenger
+265,Mercedes-Benz,Sprinter 3500 Cargo
+266,Mercedes-Benz,Sprinter 3500 Crew
+267,Mercedes-Benz,Sprinter 3500 XD Cargo
+268,Mercedes-Benz,Sprinter 3500 XD Crew
+269,Mercedes-Benz,Sprinter 4500 Cargo
+270,Mercedes-Benz,Sprinter 4500 Crew
+271,MINI,Clubman
+272,MINI,Countryman
+273,MINI,Hardtop 2 Door
+274,MINI,Hardtop 4 Door
+275,Mitsubishi,Eclipse Cross
+276,Mitsubishi,Mirage
+277,Mitsubishi,Mirage G4
+278,Mitsubishi,Outlander
+279,Mitsubishi,Outlander PHEV
+280,Mitsubishi,Outlander Sport
+281,Nissan,370Z
+282,Nissan,Altima
+283,Nissan,Armada
+284,Nissan,Frontier Crew Cab
+285,Nissan,Frontier King Cab
+286,Nissan,GT-R
+287,Nissan,Kicks
+288,Nissan,LEAF
+289,Nissan,Maxima
+290,Nissan,Murano
+291,Nissan,NV1500 Cargo
+292,Nissan,NV200
+293,Nissan,NV2500 HD Cargo
+294,Nissan,NV3500 HD Cargo
+295,Nissan,NV3500 HD Passenger
+296,Nissan,Pathfinder
+297,Nissan,Rogue
+298,Nissan,Rogue Sport
+299,Nissan,Sentra
+300,Nissan,Titan Crew Cab
+301,Nissan,Titan King Cab
+302,Nissan,TITAN XD Crew Cab
+303,Nissan,Versa
+304,Porsche,718 Boxster
+305,Porsche,718 Cayman
+306,Porsche,718 Spyder
+307,Porsche,911
+308,Porsche,Cayenne
+309,Porsche,Cayenne Coupe
+310,Porsche,Macan
+311,Porsche,Panamera
+312,Porsche,Taycan
+313,Ram,1500 Classic Crew Cab
+314,Ram,1500 Classic Quad Cab
+315,Ram,1500 Crew Cab
+316,Ram,1500 Quad Cab
+317,Ram,2500 Crew Cab
+318,Ram,3500 Crew Cab
+319,Ram,ProMaster Cargo Van
+320,Ram,ProMaster City
+321,Subaru,Ascent
+322,Subaru,BRZ
+323,Subaru,Crosstrek
+324,Subaru,Forester
+325,Subaru,Impreza
+326,Subaru,Legacy
+327,Subaru,Outback
+328,Subaru,WRX
+329,Tesla,Model 3
+330,Tesla,Model S
+331,Tesla,Model X
+332,Tesla,Model Y
+333,Toyota,4Runner
+334,Toyota,86
+335,Toyota,Avalon
+336,Toyota,Avalon Hybrid
+337,Toyota,Camry
+338,Toyota,Camry Hybrid
+339,Toyota,C-HR
+340,Toyota,Corolla
+341,Toyota,Corolla Hatchback
+342,Toyota,Corolla Hybrid
+343,Toyota,GR Supra
+344,Toyota,Highlander
+345,Toyota,Highlander Hybrid
+346,Toyota,Land Cruiser
+347,Toyota,Mirai
+348,Toyota,Prius
+349,Toyota,Prius Prime
+350,Toyota,RAV4
+351,Toyota,RAV4 Hybrid
+352,Toyota,Sequoia
+353,Toyota,Sienna
+354,Toyota,Tacoma Access Cab
+355,Toyota,Tacoma Double Cab
+356,Toyota,Tundra CrewMax
+357,Toyota,Tundra Double Cab
+358,Toyota,Yaris
+359,Toyota,Yaris Hatchback
+360,Volkswagen,Arteon
+361,Volkswagen,Atlas
+362,Volkswagen,Atlas Cross Sport
+363,Volkswagen,Golf
+364,Volkswagen,Golf GTI
+365,Volkswagen,Jetta
+366,Volkswagen,Jetta GLI
+367,Volkswagen,Passat
+368,Volkswagen,Tiguan
+369,Volvo,S60
+370,Volvo,S90
+371,Volvo,V60
+372,Volvo,V90
+373,Volvo,XC40
+374,Volvo,XC60
+375,Volvo,XC90

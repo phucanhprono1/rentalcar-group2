@@ -1,0 +1,14 @@
+<div class="dropzone" appDragAndDrop (drop)="handleFileDropped($event)" (dragover)="onDragOver($event)">
+  <img src="/assets/upload-sign.svg" alt="upload" height="50" width="50"/>
+  <input #fileInput id="fileSelect" type="file"
+         (change)="onFileSelected($event)"
+         [accept]="allowedFileTypes.join(',')"
+         class="files" />
+  <div><label for="fileSelect"><h4 class="mt-3">Drag and Drop</h4></label></div>
+  <div>OR</div>
+  <a href="#" (click)="triggerFileInputClick($event, fileInput)">
+    Select file
+  </a>
+</div>
+<div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+<app-file-preview-component [fileData]="files" (fileRemoved)="onFileRemoved()"></app-file-preview-component>

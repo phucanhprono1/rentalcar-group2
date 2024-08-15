@@ -1,0 +1,39 @@
+h4 {
+  margin-left: 60px;
+}
+#no-rating{
+  margin-left: 60px;
+}
+#no-of-ride{
+  margin-top: -15px;
+}
+.carousel-inner {
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* This creates a 16:9 aspect ratio. Adjust if needed. */
+  position: relative;
+}
+
+.carousel-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.carousel-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This will cover the entire container while maintaining aspect ratio */
+  object-position: center; /* This centers the image within the container */
+}

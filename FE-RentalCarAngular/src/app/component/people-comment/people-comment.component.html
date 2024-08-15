@@ -1,0 +1,20 @@
+<div class="container-fluid my-4 p-4 bg-light rounded">
+  <h2 class="mb-5">What people say?</h2>
+  <div class="row g-3">
+    <div class="col-md-6" *ngFor="let feedback of feedbacks">
+      <div class="d-flex bg-white p-3 rounded shadow-sm">
+        <div class="flex-shrink-0 me-3">
+          <i class="bi bi-person-circle display-1"></i>
+        </div>
+        <div class="flex-grow-1 ms-3">
+          <h6>{{ feedback.createBy }}</h6>
+          <small class="text-muted">{{ feedback.createDate | dateTimeFormatter }}</small>
+          <div>
+            <app-car-rating-star [rating]="feedback.ratings"></app-car-rating-star>
+          </div>
+          <p class="mb-0">{{ feedback.content }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

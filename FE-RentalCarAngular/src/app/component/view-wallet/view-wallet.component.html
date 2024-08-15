@@ -1,0 +1,176 @@
+<div class="container mt-5">
+  <div class="container mt-5">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li aria-current="page" class="breadcrumb-item active">My Wallet</li>
+      </ol>
+    </nav>
+
+    <h2>My Wallet</h2>
+    <div class="my-4">
+      <div class="my-4 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Your current balance:</h4>
+        <div>
+          <button class="btn btn-warning me-2 px-5" data-bs-toggle="modal" data-bs-target="#withdrawModal">Withdraw</button>
+          <button class="btn btn-success px-5" data-bs-toggle="modal" data-bs-target="#topUpModal">Top-up</button>
+        </div>
+      </div>
+
+      <h3 class="text-success">{{ currentBalance| number:'1.0-0' }} VND</h3>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="withdrawModalLabel">Withdraw</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Your current balance is {{ currentBalance }}. Please select the amount to withdraw from your wallet.
+            <select class="form-select mt-3" [(ngModel)]="withdrawAmount">
+              <option value="2000000" >2,000,000</option>
+              <option value="5000000">5,000,000</option>
+              <option value="10000000">10,000,000</option>
+              <option value="{{ currentBalance }}">All balance</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="withdraw(withdrawAmount)" [disabled]="isLoading">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              <span *ngIf="isLoading">Loading...</span>
+              <span *ngIf="!isLoading">OK</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+      <div #successToast class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <!-- Message will be set dynamically -->
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+      <div #failToast class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <!-- Message will be set dynamically -->
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top-up Modal -->
+    <div #successTopUp class="modal fade" id="topUpModal" tabindex="-1" aria-labelledby="topUpModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="topUpModalLabel">Top-up</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Your current balance is {{ currentBalance }}. Please select the amount to top-up your wallet.
+            <select class="form-select mt-3" [(ngModel)]="topUpAmount">
+              <option value="2000000">2,000,000</option>
+              <option value="5000000">5,000,000</option>
+              <option value="10000000">10,000,000</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="topUp(topUpAmount)" [disabled]="isLoading">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              <span *ngIf="isLoading">Loading...</span>
+              <span *ngIf="!isLoading">OK</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Transactions</h3>
+    <div class="row mb-3 d-flex justify-content-between align-items-center">
+      <div class="col-md-5">
+        <input class="form-control" placeholder="From" type="date" [(ngModel)]="fromDate">
+      </div>
+      <div class="col-md-5 ml-md-4">
+        <input class="form-control" placeholder="To" type="date" [(ngModel)]="toDate">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col d-flex justify-content-end">
+        <button class="btn btn-primary px-5" (click)="searchTransactions()">Search</button>
+      </div>
+    </div>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Type</th>
+        <th scope="col">Date time</th>
+        <th scope="col">Booking No.</th>
+        <th scope="col">Car Name</th>
+        <th scope="col">Note</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let transaction of transactions; let i = index">
+        <td>{{ transaction.id}}</td>
+        <td *ngIf="transaction.amount > 0" style="color: #03fc28">
+          +{{(transaction.amount | number:'1.0-0')}}
+        </td>
+        <td *ngIf="transaction.amount < 0" class="text-danger">
+          {{(transaction.amount | number:'1.0-0') }}</td>
+<!--        <td>{{ transaction.amount >0  ?'+'+transaction.amount:transaction.amount | number:'1.0-0'}}</td>-->
+        <td>{{ setTransactionType(transaction.type) }}</td>
+        <td>{{ formatDateTime(transaction.dateTime) }}</td>
+        <td>{{ transaction.bookingNo==null ? 'N/A' : transaction.bookingNo }}</td>
+        <td>{{ transaction.carName==null ? 'N/A' : transaction.carName }}</td>
+        <td>{{ transaction.note }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="row">
+      <div class="col-12 d-flex justify-content-between">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="page === 1">
+              <a class="page-link"  (click)="changePage(page - 1)">Previous</a>
+            </li>
+            <li class="page-item" *ngFor="let p of getPageNumbers(); let index = index"
+                [class.active]="index + 1 === page">
+              <a class="page-link"  (click)="changePage(index + 1)">{{ index + 1 }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="page === totalPages">
+              <a class="page-link"  (click)="changePage(page + 1)">Next</a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="d-flex justify-content-center align-items-center my-3">
+          <label for="pageSize" class="me-2" style="width: 150px;">Items per page:</label>
+          <select id="pageSize" class="form-control form-select w-50 ms-3" (change)="changePageSize($event)">
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

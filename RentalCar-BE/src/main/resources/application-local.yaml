@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: RentalCar-BE
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;database=CarRentalDB;encrypt=true;trustServerCertificate=true;useUnicode=true;characterEncoding=UTF-8
+    username: sa
+    password: sa
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServer2012Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      id:
+        new_generator_mappings: true
+  data:
+    rest:
+      base-path: /api
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: phucanhprono1@gmail.com
+    password: kmxm wcck nqwa soua
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+server:
+  port: 8081
+jwt:
+  secret: 404fdsfsdewrewtwrdfdsdf343254354334eter2B4B6250645367566B5970
+allow:
+  origins: http://localhost:4200
+  methods: GET, POST, PUT, DELETE
+  headers: Content-Type, Authorization
+  max-age: 3600
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql: trace
+    org.springframework.security: debug
+    org:
+      springframework:
+        web:
+          client:
+            RestTemplate: debug
+
+allowed-origins: http://localhost:4200
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v1/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+file:
+  service:
+    view-url: http://localhost:8082/api/files/view/
+    download-url: http://localhost:8082/api/files/download/
+    upload-url: http://localhost:8082/api/files/upload
+fileStorage: D:/Car-images

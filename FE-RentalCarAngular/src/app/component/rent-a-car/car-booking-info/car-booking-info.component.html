@@ -1,0 +1,26 @@
+<div class = " row">
+  <div class = " col border border-secondary mx-0">
+    <div class = "flex-shrink-0 ms-3 mt-3">
+      <img [src]="firstPic" class = "" alt = "avatar" style = "max-height: 200px; max-width:350px">
+    </div>
+    <div class="ms-3 fw-bold" style="font-size: 1.5rem">{{ carDetail.name }}</div>
+    <div class = "d-flex align-items-center ms-3"><span class="me-5">Rating:</span>
+      <app-car-rating-star [rating]="carDetail.rating"></app-car-rating-star>
+    </div>
+    <div class="ms-3">No. of rides: <span class = "ms-3">{{ carDetail.numberOfRide }}</span></div>
+    <div class="ms-3">Price: <span class = "" style = "margin-left: 63px">{{  basePrice | vnMoneyFormatter }}/day</span></div>
+    <div class="ms-3">Locations: <span class = "" style = "margin-left: 30px">{{ address }}</span></div>
+    <div class="ms-3 ">Status<span style = "color: #03fc0b; margin-left: 62px">{{status }}</span></div>
+  </div>
+  <div class = "col border border-secondary mx-0">
+    <div class = "fw-bold" style = "font-size: 1.5rem">Booking summary</div>
+    <div class = "d-flex flex-column align-items-end">
+      <div class = "my-2 fw-bold">Number of days: {{days}}</div>
+      <div class = "my-2 fw-bold">Price per day: {{basePrice| vnMoneyFormatter}} VND</div>
+      <hr class = "text-dark " style = "border: #1a1d20 2px solid; width: 500px">
+      <div class = "my-2 fw-bold">Total: {{basePrice*days| vnMoneyFormatter}} VND</div>
+      <div class = "my-2 fw-bold">Deposit:{{deposit| vnMoneyFormatter}} VND</div>
+    </div>
+
+  </div>
+</div>

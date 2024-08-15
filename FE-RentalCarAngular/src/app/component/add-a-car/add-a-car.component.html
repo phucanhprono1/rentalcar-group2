@@ -1,0 +1,11 @@
+<h3 class="p-4 ms-5">Add car</h3>
+<div class="container-fluid bg-light">
+  <div class="arrow-steps clearfix d-flex justify-content-center p-5">
+    <div class="step" *ngFor="let step of steps; let i = index"
+         [ngClass]="{'current': currentStep === i, 'done': currentStep > i}">
+      <span>{{ step }}</span>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
+

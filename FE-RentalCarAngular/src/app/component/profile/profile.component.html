@@ -1,0 +1,243 @@
+<div class="display-6 w-100 ms-4 mt-5">My Profile</div>
+<div class="tabs">
+
+  <input type="radio" name="tabs" id="tabone" checked="checked">
+  <label for="tabone" class="label1 border border-secondary">Personal information</label>
+  <div class="tab border border-secondary">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <div class="row" formGroupName="profile">
+        <div class="col-6">
+          <div class="mb-3 ms-3">
+            <label for="fullName" class="form-label">Full Name:</label>
+            <input formControlName="fullName"
+                   name="fullName"
+                   type="text"
+                   class="form-control w-50"
+                   id="fullName"
+                   aria-describedby="fullName">
+            <div *ngIf="fullName?.invalid && (fullName?.dirty || fullName?.touched)"
+                 class="alert alert-danger mt-1 w-50">
+              <div *ngIf="fullName?.errors?.['required'] && fullName?.errors?.['notOnlyWhitespace']">
+                Name is required
+              </div>
+            </div>
+          </div>
+          <div class="mb-3 ms-3">
+            <label for="phone" class="form-label">Phone number: <span class="text-danger">*</span></label>
+            <input formControlName="phoneNo" type="text" class="form-control w-50" id="phone">
+            <div *ngIf="phoneNo?.invalid && (phoneNo?.dirty || phoneNo?.touched)" class="alert alert-danger mt-1 w-50">
+              <div *ngIf="phoneNo?.errors?.['required']">
+                Phone is required
+              </div>
+              <div *ngIf="phoneNo?.errors?.['pattern']">
+                Phone must be a valid format
+              </div>
+            </div>
+          </div>
+          <div class="mb-3 ms-3">
+            <label for="nationalIdNo" class="form-label">National ID No.: <span class="text-danger">*</span></label>
+            <input formControlName="nationalIdNo" type="text" class="form-control w-50" id="nationalIdNo">
+            <div *ngIf="nationalIdNo?.invalid && (nationalIdNo?.dirty || nationalIdNo?.touched)"
+                 class="alert alert-danger mt-1 w-50">
+              <div *ngIf="nationalIdNo?.errors?.['required']">
+                National number is required
+              </div>
+              <div *ngIf="nationalIdNo?.errors?.['pattern']">
+                National number must be a valid format
+              </div>
+            </div>
+          </div>
+
+          <div class="my-3">
+            <label class="form-label ms-3">Address</label>
+            <select formControlName="city" class=" ms-3 form-select w-75 mt-4">
+              <option *ngFor="let city of cities" [value]="city.cityProvinceCode">{{ city.cityProvince }}</option>
+            </select>
+            <div *ngIf="city?.invalid && (city?.dirty || city?.touched) && city?.value==='' "
+                 class="alert alert-danger py-2 w-75 ms-3">
+              You must select a city
+            </div>
+            <div class="my-3 ">
+              <select formControlName="district" class="ms-3 form-select w-75 mt-4">
+                <option *ngFor="let district of districts" [value]="district.districtCode">{{ district.district }}
+                </option>
+              </select>
+              <div *ngIf="district?.invalid && (district?.dirty || district?.touched) && district?.value===''"
+                   class="py-2 w-75 ms-3 alert alert-danger">
+                You must select a district
+              </div>
+            </div>
+            <div class="my-3 ">
+              <select formControlName="ward" class=" ms-3 form-select w-75 mt-4">
+                <option *ngFor="let ward of wards" [value]="ward.wardCode">{{ ward.ward }}</option>
+              </select>
+              <div *ngIf="ward?.invalid && (ward?.dirty || ward?.touched) && ward?.value==='' "
+                   class="alert alert-danger  py-2 w-75 ms-3 py-2 w-75 ms-3">
+                You must select a ward
+              </div>
+            </div>
+            <input formControlName="house"
+                   type="text"
+                   class="form-control w-75 ms-3"
+                   id="houseStreet"
+                   placeholder="House number, Street">
+            <div *ngIf="house?.invalid && (house?.dirty || house?.touched)"
+                 class="alert alert-danger mt-3 ms-3 w-75">
+              <div *ngIf="house?.errors?.['required'] && house?.errors?.['notOnlyWhitespace']">
+                House number and Street is required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="dateOfBirth" class="form-label">Date of birth:</label>
+            <input formControlName="dateOfBirth"
+                   type="date"
+                   class="form-control w-50"
+                   id="dateOfBirth"
+                   aria-describedby="emailHelp">
+            <div *ngIf="dateOfBirth?.invalid && (dateOfBirth?.dirty || dateOfBirth?.touched)"
+                 class="alert alert-danger w-50">
+              <div *ngIf="dateOfBirth?.hasError('required') ">
+                Date of birth is required
+              </div>
+              <div *ngIf="dateOfBirth?.hasError('invalidDate') ">
+                You must be older than 18 years old
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control w-50" id="email" readonly formControlName="email">
+          </div>
+          <div class="mb-3">
+            <label for="license" class="form-label">Driving license:</label>
+            <input formControlName="drivingLicense" type="file" class="form-control w-50" id="license"
+                   (change)="onFileSelected($event)">
+
+            <div *ngIf="filePreviewUrl" class="mt-2">
+              <img [src]="filePreviewUrl" alt="File Preview" style="max-width: 400px; max-height: 300px;">
+            </div>
+            <div
+              *ngIf="drivingLicense?.invalid && (drivingLicense?.dirty || drivingLicense?.touched) && !drivingLicense?.pending"
+              class="alert alert-danger w-50">
+              <div *ngIf="drivingLicense?.errors?.['required']">
+                Driving license photo is required
+              </div>
+              <div *ngIf="drivingLicense?.hasError('invalidExtension') && drivingLicense?.touched ">
+                Invalid file extension. Allowed extensions are: jpeg, png, jpg, webp, heic.
+              </div>
+              <div *ngIf="drivingLicense?.hasError('invalidFileSize') && drivingLicense?.touched ">
+                Picture is too large, please choose a picture with size less than 50mb
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col  d-flex justify-content-center w-100">
+          <button type="button" class="btn btn-outline-light text-dark text-decoration-underline mx-3" (click)="loadProfile()">Discard
+          </button>
+          <button   type="submit" class="btn btn-primary" style="width: 10%">Save</button>
+        </div>
+        <div #successProfile class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class = "modal-dialog modal-dialog-centered modal-sm">
+            <div class = "modal-content ">
+              <div class = "modal-body text-center ">
+                Success, click Ok to continue!
+              </div>
+              <div class = "modal-footer">
+                <button type = "button" class = "btn btn-outline-light text-dark  w-100" data-bs-dismiss = "modal">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <input type="radio" name="tabs" id="tabtwo">
+  <label for="tabtwo" class="label1 border border-secondary">Security</label>
+  <div class="tab">
+    <div class="fw-bold mb-5 ms-3" style="font-size: 1.5rem">Change password</div>
+    <form [formGroup]="passwordForm" (ngSubmit)="onSubmitChangePassword()">
+      <div class="mb-3 ms-3">
+        <label for="oldPassword" class="form-label">Current password <span class="text-danger">*</span></label>
+        <input formControlName="oldPassword" type="password" class="form-control w-25" id="oldPassword"
+               aria-describedby="newPassword">
+        <div *ngIf="oldPasswordIncorrect" class="alert alert-danger mt-1 w-25">
+          Current password is incorrect
+        </div>
+        <div *ngIf="oldPassword?.invalid && (oldPassword?.dirty || oldPassword?.touched)" class="alert alert-danger mt-1 w-25">
+          <div *ngIf="oldPassword?.errors?.['required']">
+            Current password is required
+          </div>
+
+          <div *ngIf="oldPassword?.errors?.['notOnlyWhitespace']">
+            Current password must not contain any blank space
+          </div>
+          <div *ngIf="oldPassword?.errors?.['pattern']">
+            Current password must be at least 7 characters long and contain at least 1 letter and 1 number
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 ms-3">
+        <label for="newPassword" class="form-label">New password <span class="text-danger">*</span></label>
+        <input formControlName="password" type="password" class="form-control w-25" id="newPassword"
+               aria-describedby="newPassword">
+        <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="alert alert-danger mt-1 w-25">
+          <div *ngIf="password?.errors?.['required']">
+            Password is required
+          </div>
+          <div *ngIf="password?.errors?.['notOnlyWhitespace']">
+            Password must not contain any blank space
+          </div>
+          <div *ngIf="password?.hasError('passwordMatch')">
+            New password must not be the same as current password
+          </div>
+          <div *ngIf="password?.errors?.['pattern']">
+            Password must be at least 7 characters long and contain at least 1 letter and 1 number
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 ms-3">
+        <label for="confirmPassword" class="form-label">Confirm password
+          <span class="text-danger">*</span></label>
+        <input formControlName="repassword" type="password"
+               class="form-control w-25"
+               id="confirmPassword"
+               aria-describedby="confirmPassword">
+        <div *ngIf="repassword?.invalid && (repassword?.dirty || repassword?.touched)"
+             class="alert alert-danger mt-1 w-25">
+          <div *ngIf="repassword?.errors?.['required'] || repassword?.errors?.['notOnlyWhitespace']">
+            Confirm password is required
+          </div>
+          <div *ngIf="repassword?.hasError('passwordMismatch') ||  repassword?.touched">
+            Confirm password must be the same as password
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col  d-flex justify-content-center w-100">
+          <button type="reset" class="btn btn-outline-light text-dark text-decoration-underline mx-3 ">Discard
+          </button>
+          <button type="submit" class="btn btn-primary " style="width: 10%">Save</button>
+        </div>
+        <div #changePasswordProfile class="modal fade" id="changePasswordProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class = "modal-dialog modal-dialog-centered modal-sm">
+            <div class = "modal-content ">
+              <div class = "modal-body text-center ">
+                Success, click Ok to continue!
+              </div>
+              <div class = "modal-footer">
+                <button type = "button" class = "btn btn-outline-light text-dark  w-100" data-bs-dismiss = "modal">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

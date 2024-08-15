@@ -1,0 +1,16 @@
+.dropzone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: white;
+  width: 75%;
+}
+
+.upload-message {
+  margin-top: 10px;
+}
+
+.files {
+  display: none;
+}

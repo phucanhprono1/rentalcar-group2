@@ -1,0 +1,16 @@
+<div class="row border border-dark" style="height: 200px">
+  <div class="col ms-4">
+     <div class="my-2 fw-bold"> You have successfully booked {{carName}} from {{fromDate}} to {{toDate}}</div>
+     <div class="my-2 fw-bold"> You booking number is: {{booking.bookingNo}}</div>
+     <div class="my-2 fw-bold">Our operator will contact you with further guidance about pickup</div>
+  </div>
+  <div class = "row mt-4">
+    <div class = "col  d-flex justify-content-center w-100">
+      <button (click)="navigate('/customer')" type = "button" class = "btn btn-outline-light text-dark text-decoration-underline mx-3">Go to homepage
+      </button>
+      <button (click)="navigate('/customer/search-car/thumbnail-view')"  type = "button" class = "btn btn-outline-secondary text-dark  mx-3">Book another car
+      </button>
+      <button [routerLink]="['/customer/view-booking-list/booking-detail', bookingNumber]"  type = "button" class = "btn btn-primary" style = "width: 15%">View Booking</button>
+    </div>
+  </div>
+</div>

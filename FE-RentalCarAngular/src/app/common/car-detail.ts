@@ -1,0 +1,33 @@
+export class CarDetail {
+
+  constructor(public id: number,
+              public brand: string,
+              public model: string,
+              public name: string,
+              public licensePlate: string,
+              public color: string,
+              public numberOfSeats: number,
+              public productionYears: number,
+              public transmissionType: string,
+              public fuelType: string,
+              public mileage: number,
+              public fuelConsumption: number,
+              public basePrice: number,
+              public deposit: number,
+              public address: string,
+              public description: string,
+              public additionalFunctions: string,
+              public termsOfUse: string,
+              public registrationPaper: string,
+              public certificateOfInspection: string,
+              public insurance: string,
+              public carStatus: string,
+              public cityCode: number,
+              public districtCode: number,
+              public wardCode: number,
+              public rating: number,
+              public numberOfRide: number,
+              public isPendingDeposit: boolean,
+              public isPendingPayment: boolean,) {
+  }
+}

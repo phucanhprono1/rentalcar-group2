@@ -1,0 +1,60 @@
+<div class="container-fluid bg-light">
+  <h4>Preview</h4>
+  <form (ngSubmit)="onSubmit()">
+    <div class="row p-5">
+      <div class="col-md-6">
+        <div id="carouselExampleIndicators" class="carousel slide">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img [src]="frontUrl" class="d-block w-100 img-thumbnail" alt="Car Image">
+            </div>
+            <div class="carousel-item">
+              <img [src]="leftUrl" class="d-block w-100 img-thumbnail" alt="Car Image">
+            </div>
+            <div class="carousel-item">
+              <img [src]="backUrl" class="d-block w-100 img-thumbnail" alt="Car Image">
+            </div>
+            <div class="carousel-item">
+              <img [src]="rightUrl" class="d-block w-100 img-thumbnail" alt="Car Image">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h2>{{displayName}}</h2>
+        <div class="d-flex">
+          <span>Ratings: </span>
+          <span class="ms-2">
+            <app-car-rating-star [rating]="0"></app-car-rating-star>
+          </span>
+        </div>
+        <p id="no-rating">(No rating yet)</p>
+        <p id="no-of-ride">No of ride: <span>0</span></p>
+        <p>Prices: <span>{{price | vnMoneyFormatter}}/day</span></p>
+        <p>Location: <span *ngIf="district && city">{{ district.district}}, {{city.cityProvince}}</span></p>
+        <p>Status: <span class="text-success fw-bold">{{carStatus}}</span></p>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center p-5">
+      <button type="button" (click)="navigate('/car-owner')" class="btn btn-link me-3">Cancel</button>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+  </form>
+
+</div>
+

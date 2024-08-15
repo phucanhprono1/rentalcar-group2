@@ -1,0 +1,17 @@
+<div class="game-container">
+  <div *ngIf="showSettings" class="settings-menu">
+    <h2>Game Settings</h2>
+    <div class="setting">
+      <label for="gameSpeed">Game Speed:</label>
+      <input type="range" id="gameSpeed" min="0.5" max="2" step="0.1" [(ngModel)]="gameSpeed">
+      <span>{{gameSpeed.toFixed(1)}}</span>
+    </div>
+    <div class="setting">
+      <label for="pipeSpawnRate">Pipe Spawn Rate:</label>
+      <input type="range" id="pipeSpawnRate" min="100" max="300" step="10" [(ngModel)]="pipeSpawnRate">
+      <span>{{pipeSpawnRate}}</span>
+    </div>
+    <button (click)="startGame()">Start Game</button>
+  </div>
+  <canvas #gameCanvas [style.display]="showSettings ? 'none' : 'block'"></canvas>
+</div>

@@ -1,0 +1,16 @@
+a {
+  text-decoration: none;
+}
+#confirmLogOut{
+  margin-top: -10px;
+}
+
+.header{
+  cursor: pointer;
+}
+
+.welcome-message {
+  overflow: hidden; /* Ensure text is clipped */
+  text-overflow: ellipsis; /* Show ellipsis if overflow occurs */
+  white-space: nowrap; /* Prevent text from wrapping */
+}

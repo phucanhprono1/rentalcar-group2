@@ -1,0 +1,11 @@
+textarea {
+  resize: none;
+}
+#searchButton{
+  margin-left: -25px;
+  margin-top: 5px;
+}
+.mx-3 {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}

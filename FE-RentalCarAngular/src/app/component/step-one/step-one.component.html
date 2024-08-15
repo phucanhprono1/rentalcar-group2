@@ -1,0 +1,156 @@
+<div class="container-fluid bg-light">
+  <p class="text-danger note">Note: Please check your information carefully, you'll not be able to change the basic details of your car, which is based on the registration information</p>
+  <form [formGroup]="stepOneForm" class="p-5" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-6">
+        <label class="fw-bold" for="licensePlate">License plate: </label><span class="text-danger"> *</span>
+        <input type="text" formControlName="licensePlate" id="licensePlate" class="form-control mt-2" required>
+        <div *ngIf="licensePlate?.invalid && (licensePlate?.dirty || licensePlate?.touched)" class="alert alert-danger mt-1 d-block w-100">
+          <div *ngIf="licensePlate?.errors?.['required'] || licensePlate?.errors?.['notOnlyWhitespace']">
+            License Plate is required
+          </div>
+          <div *ngIf="licensePlate?.errors?.['pattern']">
+            License Plate is invalid format
+          </div>
+          <div *ngIf="licensePlate?.errors?.['licensePlateExists']">
+            License Plate already exists
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="fw-bold">Color: </label><span class="text-danger"> *</span>
+        <select formControlName="color" id="color" class="form-select mt-2" required>
+          <option *ngFor="let color of colors" [ngValue]="color">{{color}}</option>
+        </select>
+        <div *ngIf="color?.invalid && (color?.dirty || color?.touched)" class="alert alert-danger mt-1 d-block">
+          <div *ngIf="color?.errors?.['required']">
+            Color is required
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mt-3">
+        <label class="fw-bold">Brand name: </label><span class="text-danger"> *</span>
+        <select formControlName="brand" id="brand" class="form-select mt-2" required>
+          <option *ngFor="let brand of brands" [ngValue]="brand">{{brand}}</option>
+        </select>
+        <div *ngIf="brand?.invalid && (brand?.dirty || brand?.touched)" class="alert alert-danger mt-1 d-block">
+          <div *ngIf="brand?.errors?.['required']">
+            Brand is required
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-3">
+        <label class="fw-bold" for="model">Model: </label><span class="text-danger"> *</span>
+        <select formControlName="model" id="model" class="form-select mt-2" required>
+          <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
+        </select>
+        <div *ngIf="model?.invalid && (model?.dirty || model?.touched)" class="alert alert-danger mt-1 d-block">
+          <div *ngIf="model?.errors?.['required']">
+            Production year is required
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mt-3">
+        <label class="fw-bold">Production year: </label><span class="text-danger"> *</span>
+        <select formControlName="productionYears" id="productionYears" class="form-select mt-2" required>
+          <option *ngFor="let year of years" [ngValue]="year">{{year}}</option>
+        </select>
+        <div *ngIf="productionYears?.invalid && (productionYears?.dirty || productionYears?.touched)" class="alert alert-danger mt-1 d-block">
+          <div *ngIf="productionYears?.errors?.['required']">
+            Production year is required
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-3">
+        <label class="fw-bold" for="numberOfSeats">No of seats: </label><span class="text-danger"> *</span>
+        <input type="number" formControlName="numberOfSeats" id="numberOfSeats" class="form-control mt-2" required>
+        <div *ngIf="numberOfSeats?.invalid && (numberOfSeats?.dirty || numberOfSeats?.touched)" class="alert alert-danger mt-1 d-block">
+          <div *ngIf="numberOfSeats?.errors?.['required']">
+            Number of seat is required
+          </div>
+          <div *ngIf="numberOfSeats?.errors?.['pattern']">
+            Number of seat is invalid format
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mt-3">
+        <label class="fw-bold">Transmission: </label><span class="text-danger"> *</span>
+        <div class="mt-2">
+          <div class="btn-group">
+            <input type="radio" class="btn-check" formControlName="transmissionType" value="Automatic" id="automatic" required>
+            <label class="btn btn-outline-primary" for="automatic">Automatic</label>
+            <input type="radio" class="btn-check" formControlName="transmissionType" value="Manual" id="manual" required>
+            <label class="btn btn-outline-primary" for="manual">Manual</label>
+          </div>
+          <div *ngIf="transmissionType?.invalid && (transmissionType?.dirty || transmissionType?.touched)" class="alert alert-danger mt-1 d-block w-50">
+            <div *ngIf="transmissionType?.errors?.['required']">
+              Transmission type is required
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-3">
+        <label class="fw-bold">Fuel: </label><span class="text-danger"> *</span>
+        <div class="mt-2">
+          <div class="btn-group">
+            <input type="radio" class="btn-check" formControlName="fuelType" value="gasoline" id="gasoline" required>
+            <label class="btn btn-outline-primary" for="gasoline">Gasoline</label>
+            <input type="radio" class="btn-check" formControlName="fuelType" value="diesel" id="diesel" required>
+            <label class="btn btn-outline-primary" for="diesel">Diesel</label>
+          </div>
+          <div *ngIf="fuelType?.invalid && (fuelType?.dirty || fuelType?.touched)" class="alert alert-danger mt-1 d-block w-50">
+            <div *ngIf="fuelType?.errors?.['required']">
+              Fuel type is required
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <h3 class="mb-3">Documents</h3>
+      <div class="col-md-4">
+        <label class="mb-3 fw-bold">Registration paper: </label> <span class="text-danger">*</span>
+        <app-drop-zone formArrayName="registrationPaper" [allowedFileTypes]="fileTypes" (onFileDropped)="handleDocumentUpload($event, 'registrationPaper')"></app-drop-zone>
+        <div *ngIf="registrationPaper?.invalid && (registrationPaper?.dirty || registrationPaper?.touched)" class="alert alert-danger mt-1 d-block">
+          <div *ngIf="registrationPaper?.errors?.['required']">
+            Registration paper is required
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="mb-3 fw-bold">Certificate of inspection: </label> <span class="text-danger">*</span>
+        <app-drop-zone formArrayName="certificateOfInspection" [allowedFileTypes]="fileTypes" (onFileDropped)="handleDocumentUpload($event, 'certificateOfInspection')"></app-drop-zone>
+        <div *ngIf="certificateOfInspection?.invalid && (certificateOfInspection?.dirty || certificateOfInspection?.touched)" class="alert alert-danger mt-1 d-block">
+          <div *ngIf="certificateOfInspection?.errors?.['required']">
+            Certificate of inspection is required
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="mb-3 fw-bold">Insurance: </label> <span class="text-danger">*</span>
+        <app-drop-zone formArrayName="insurance" [allowedFileTypes]="fileTypes" (onFileDropped)="handleDocumentUpload($event, 'insurance')"></app-drop-zone>
+        <div *ngIf="insurance?.invalid && (insurance?.dirty || insurance?.touched)" class="alert alert-danger mt-1 d-block">
+          <div *ngIf="insurance?.errors?.['required']">
+            Insurance is required
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>File type: doc, .docx, .pdf, .jpg, .jpeg, .png</p>
+    <div class="d-flex justify-content-center p-5">
+      <button type="button" (click)="navigate('/car-owner')" class="btn btn-link me-3">Cancel</button>
+      <button type="submit" class="btn btn-primary">Next</button>
+    </div>
+  </form>
+</div>
+

@@ -1,0 +1,161 @@
+<div class = "container-fluid">
+
+  <div class = "row ps-5 mt-3">
+    <h2>List of Cars</h2>
+    <div class = "d-flex justify-content-between">
+      <button class = "btn btn-primary" [routerLink] = "['/car-owner/add-car']">Add car</button>
+      <select name = "sorting"
+              id = "sorting"
+              class = "form-select w-auto me-5 border-black"
+              #sortSelect
+              (change) = "sortContent(sortSelect.value)">
+        <option value = "sortModifiedDate=desc" selected>Newest to oldest</option>
+        <option value = "sortModifiedDate=asc">Oldest to newest</option>
+        <option value = "sortPrice=desc">Price highest to lowest</option>
+        <option value = "sortPrice=asc">Price lowest to highest</option>
+      </select>
+    </div>
+  </div>
+
+  <div class = "row p-5" *ngFor = "let car of cars; let i = index">
+    <div class = "col-md-6">
+      <div [id] = "'carouselExampleIndicators' + i" class = "carousel slide">
+        <div class = "carousel-indicators">
+          <button type = "button"
+                  [attr.data-bs-target] = "'#carouselExampleIndicators' + i"
+                  data-bs-slide-to = "0"
+                  class = "active"
+                  aria-current = "true"
+                  aria-label = "Slide 1"></button>
+          <button type = "button" [attr.data-bs-target] = "'#carouselExampleIndicators' + i" data-bs-slide-to = "1"
+                  aria-label = "Slide 2"></button>
+          <button type = "button" [attr.data-bs-target] = "'#carouselExampleIndicators' + i" data-bs-slide-to = "2"
+                  aria-label = "Slide 3"></button>
+          <button type = "button" [attr.data-bs-target] = "'#carouselExampleIndicators' + i" data-bs-slide-to = "3"
+                  aria-label = "Slide 4"></button>
+        </div>
+        <div class = "carousel-inner container-size">
+          <div *ngFor = "let img of carImages[car.id]; let i = index"
+               class = "carousel-item"
+               [class.active] = "i === 0">
+            <img [src] = "img" class = "d-block w-100 h-100 img-thumbnail" alt = "Car image">
+          </div>
+        </div>
+        <button class = "carousel-control-prev"
+                type = "button"
+                [attr.data-bs-target] = "'#carouselExampleIndicators' + i"
+                data-bs-slide = "prev">
+          <span class = "carousel-control-prev-icon" aria-hidden = "true"></span>
+          <span class = "visually-hidden">Previous</span>
+        </button>
+        <button class = "carousel-control-next"
+                type = "button"
+                [attr.data-bs-target] = "'#carouselExampleIndicators' + i"
+                data-bs-slide = "next">
+          <span class = "carousel-control-next-icon" aria-hidden = "true"></span>
+          <span class = "visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+    <div class = "col-md-4">
+      <h2 class = "mb-4">{{ car.name }}</h2>
+      <div class = "row">
+        <div class = "col-md-4">
+          <span class = "me-2">Ratings: </span>
+        </div>
+        <div class = "col-md-8">
+          <app-car-rating-star [rating] = "car.rating"></app-car-rating-star>
+        </div>
+      </div>
+      <div class = "row">
+        <div class = "col-md-4">
+          <span>No of rides: </span>
+        </div>
+        <div class = "col-md-8">
+          <span>{{ car.numberOfRide }}</span>
+        </div>
+      </div>
+      <div class = "row">
+        <div class = "col-md-4">
+          <span>Price:</span>
+        </div>
+        <div class = "col-md-8">
+          <span>{{ car.basePrice| vnMoneyFormatter }}/day</span>
+        </div>
+      </div>
+      <div class = "row">
+        <div class = "col-md-4">
+          <span>Location: </span>
+        </div>
+        <div class = "col-md-8">
+          <span>{{ extractDistrictAndCity(car.address) }}</span>
+        </div>
+      </div>
+      <div class = "row">
+        <div class = "col-md-4">
+          <span>Status:</span>
+        </div>
+        <div class = "col-md-8">
+          <span *ngIf = "car.carStatus == 'AVAILABLE'" style = "color: green">Available</span>
+          <span *ngIf = "car.carStatus == 'BOOKED'" style = "color: blue">Booked</span>
+          <span *ngIf = "car.carStatus == 'STOPPED'" style = "color: red">Stopped</span>
+        </div>
+      </div>
+    </div>
+    <div class = "col-md-2 d-flex flex-column">
+      <button (click) = "viewCarDetails(car.id)" class = "btn btn-primary border-black w-100 mb-3">View Detail</button>
+
+      <app-confirm-deposit *ngIf = "car.isPendingDeposit"
+                           (updateEvent) = "updateCarStatusById($event)"
+                           [carId] = "car.id"
+                           [currentStatus] = "'PENDING_DEPOSIT'"
+                           [targetStatus] = "'CONFIRMED'"
+      ></app-confirm-deposit>
+
+      <app-confirm-payment *ngIf = "car.isPendingPayment"
+                           (updateEvent) = "updateCarStatusById($event)"
+                           [carId] = "car.id"
+                           [currentStatus] = "'PENDING_PAYMENT'"
+                           [targetStatus] = "'COMPLETED'"
+      ></app-confirm-payment>
+
+      <button (click) = "viewCarFeedbacks(car.id)" class = "btn btn-primary border-black w-100 mb-3">View Feedbacks
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!--Pagination-->
+<div class="row">
+  <div class="col-md-9">
+    <!-- Your main content here -->
+  </div>
+  <div class="col-md-3 d-flex justify-content-evenly align-items-center">
+    <div class="d-flex justify-content-start  align-content-center">
+      <ngb-pagination
+        [(page)]="pageNumber"
+        [pageSize]="pageSize"
+        [collectionSize]="totalElements"
+        [maxSize]="5"
+        (pageChange)="getListCars()"
+        class="pagination-sm me-2 mb-0"
+      ></ngb-pagination>
+      <div class="d-flex justify-content-end ms-4">
+        <select #myPageSelect
+                (change)="updatePageSize(myPageSelect.value)"
+                class="form-select form-select-sm "
+                style="width: auto; height: 60%"
+        >
+          <option>2</option>
+          <option>5</option>
+          <option selected>10</option>
+          <option>15</option>
+          <option>20</option>
+          <option>50</option>
+        </select>
+        <span class="ms-2">Per page</span>
+      </div>
+    </div>
+  </div>
+</div>

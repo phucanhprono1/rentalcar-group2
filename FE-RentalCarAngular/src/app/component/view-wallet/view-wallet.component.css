@@ -1,0 +1,19 @@
+
+
+
+h2, h3 {
+  margin-top: 20px;
+}
+
+.text-success {
+  font-size: 2rem;
+}
+
+.table {
+  margin-top: 20px;
+}
+
+.pagination {
+  justify-content: center;
+  margin-top: 20px;
+}

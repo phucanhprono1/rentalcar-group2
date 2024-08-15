@@ -1,0 +1,30 @@
+.feature-icon {
+  font-size: 2rem;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  width: 100px;
+  border: 2px solid black;
+  border-radius: 50%;
+  margin-left: 50px;
+  position: absolute;
+  z-index: 1;
+}
+.feature-box {
+  margin-bottom: 50px;
+  border: 1px solid black;
+  padding: 10px;
+  text-align: left;
+  z-index: 0;
+  width: 200px;
+  height: 350px;
+  position: relative;
+  top: 30px;
+}
+.feature-box h5 {
+  margin-top: 50px;
+  text-align: center;
+}
+

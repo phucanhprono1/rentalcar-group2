@@ -1,0 +1,73 @@
+<section class="intro container-fluid bg-light p-5" *ngIf="cars.length>0">
+  <table class="table table-bordered table-hover">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Name</th>
+      <th scope="col">Images</th>
+      <th scope="col">Ratings</th>
+      <th scope="col">No of rides</th>
+      <th scope="col">Price</th>
+      <th scope="col">Location</th>
+      <th scope="col">Status</th>
+      <th scope="col" style="width: 150px;">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let car of cars; let i = index">
+      <td>{{i + 1}}</td>
+      <td>{{car.name}}</td>
+      <td>
+        <div id="carouselExampleIndicators{{car.id}}" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button *ngFor="let image of car.images; let i = index"
+                    type="button"
+                    [attr.data-bs-target]="'#carouselExampleIndicators' + car.id"
+                    [attr.data-bs-slide-to]="i"
+                    [class.active]="i === 0"
+                    [attr.aria-label]="'Slide ' + (i + 1)">
+            </button>
+          </div>
+          <div class="carousel-inner container-size">
+            <div *ngFor="let imageUrl of car.images; let i = index" class="carousel-item" [class.active]="i === 0">
+              <img [src]="imageUrl" class="d-block w-100 h-100" alt="...">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#carouselExampleIndicators' + car.id" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#carouselExampleIndicators' + car.id" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </td>
+      <td>
+        <app-car-rating-star [rating]="car.ratings" ></app-car-rating-star>
+      </td>
+      <td>{{car.noOfRide}}</td>
+      <td>{{ car.basePrice| vnMoneyFormatter}}/day</td>
+      <td>{{car.address}}</td>
+      <td>
+        <span *ngIf="car.carStatus == 'AVAILABLE'" style="color: green">Available</span>
+        <span *ngIf="car.carStatus == 'BOOKED'" style="color: blue">Booked</span>
+        <span *ngIf="car.carStatus == 'STOPPED'" style="color: red">Stopped</span>
+      </td>
+      <td>
+        <div>
+          <button class="btn btn-primary mb-2 w-75" (click)="getId(car.id)">Rent now</button>
+        </div>
+        <div>
+          <button class="btn btn-primary w-75" [routerLink]="'/customer/search-car/view-detail/'+car.id">View details</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</section>
+<div class="container-fluid" *ngIf="cars.length===0">
+  <h3 class="text-danger ms-5">
+    No cars match your credentials, please try again.
+  </h3>
+</div>

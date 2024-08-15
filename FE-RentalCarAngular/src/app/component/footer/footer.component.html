@@ -1,0 +1,50 @@
+<div class = "container-fluid bg-light vw-100 p-5" style = "height: 250px;">
+  <div class = "row p-3">
+    <div class = "col-3" *ngIf="role==='' || role==='ROLE_CUSTOMER' ">
+      <p>RENT CARS</p>
+      <div class="ps-0" *ngIf="role==='' ">
+        <a class="btn btn-outline-light  text-dark ps-0" data-bs-toggle="modal" data-bs-target="#loginSignupModal">Search Cars and Rates</a>
+      </div>
+      <div class="ps-0" *ngIf="role==='ROLE_CUSTOMER'">
+        <a (click)="navigateToHomeAndScroll()" class="btn btn-outline-light  text-dark ps-0">Search Cars and Rates</a>
+      </div>
+    </div>
+    <div class = "col-3">
+      <p>CUSTOMER ACCESS</p>
+      <div class="ps-0" *ngIf="role===''">
+        <a class="btn btn-outline-light  text-dark ps-0" data-bs-toggle="modal" data-bs-target="#loginSignupModal">Manage my booking</a>
+      </div>
+      <div class="ps-0" *ngIf="role==='ROLE_CUSTOMER'">
+        <a class="btn btn-outline-light  text-dark ps-0" (click)="navigate('/customer/view-booking-list')">Manage my booking</a>
+      </div>
+      <div class="ps-0" *ngIf="role==='' ">
+        <a class="btn btn-outline-light  text-dark ps-0" data-bs-toggle="modal" data-bs-target="#loginSignupModal">My Wallet</a>
+      </div>
+      <div class="ps-0" *ngIf="role==='ROLE_CUSTOMER' || role==='ROLE_CAR_OWNER'">
+        <a class="btn btn-outline-light  text-dark ps-0" (click)="navigate('/wallet')">My Wallet</a>
+      </div>
+      <div class="ps-0" *ngIf="role==='' ">
+        <a class="btn btn-outline-light  text-dark ps-0" data-bs-toggle="modal" data-bs-target="#loginSignupModal">My Car</a>
+      </div>
+      <div class="ps-0" *ngIf="role==='ROLE_CAR_OWNER'">
+        <a class="btn btn-outline-light  text-dark ps-0" (click)="navigate('/car-owner/my-cars')">My Car</a>
+      </div>
+      <div class="ps-0" *ngIf="role==='' ">
+        <a class="btn btn-outline-light  text-dark ps-0" data-bs-toggle="modal" data-bs-target="#loginSignupModal">Login</a>
+      </div>
+    </div>
+    <div class = "col-3" *ngIf = "role === ''">
+      <p>JOIN US</p>
+      <div class="ps-0" *ngIf="role==='' ">
+        <a class="btn btn-outline-light  text-dark ps-0" data-bs-toggle="modal" data-bs-target="#loginSignupModal">New User Sign Up</a>
+      </div>
+    </div>
+    <div class = "col-3">
+        <p>ENTERTAINING</p>
+        <div class="ps-0">
+          <a class="btn btn-outline-light  text-dark ps-0" (click)="navigate('/flappy')">Flappy car</a>
+        </div>
+    </div>
+  </div>
+
+</div>

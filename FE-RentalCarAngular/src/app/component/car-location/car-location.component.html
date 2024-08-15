@@ -1,0 +1,19 @@
+<!-- car-location.component.html -->
+<div class="container-fluid my-4 p-5">
+  <h2 class="text-3xl font-bold mb-5 text-center text-gray-800">Where to find us?</h2>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div *ngFor="let location of getFilteredLocations()" class="col">
+      <div class="card h-100 text-white">
+        <div class="image-container">
+          <img [src]="location.image" class="card-img-top" [alt]="location.name">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h5 class="card-title text-xl font-semibold mb-2">{{ location.name }}</h5>
+              <p class="card-text text-lg">{{ getCarsCount(location.name) }} cars</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

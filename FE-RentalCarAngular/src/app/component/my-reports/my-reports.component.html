@@ -1,0 +1,79 @@
+<div class="m-5">
+  <h4 class="mb-5">My Reports</h4>
+
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <button class="nav-link " id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
+              role="tab" aria-controls="nav-home" aria-selected="true">Sales Reports
+      </button>
+      <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button"
+              role="tab" aria-controls="nav-profile" aria-selected="false">My Reports
+      </button>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade " id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+      sales
+    </div>
+    <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+      <h5 class="mt-3">Average Ratings</h5>
+      <div class="d-flex justify-content-center"><strong>{{ avgRatings }}</strong></div>
+      <div *ngIf="avgRatings" class="d-flex justify-content-center mb-3">
+        <app-car-rating-star [rating]="avgRatings"></app-car-rating-star>
+      </div>
+      <h5>Details</h5>
+      <div class="mt-3 d-flex justify-content-around">
+        <button type="button" class="btn btn-outline-dark" (click)="filterByRatingStars('')"> All
+          <div>({{ displayRatingCount(100) }})</div>
+        </button>
+        <button type="button" class="btn btn-outline-dark" (click)="filterByRatingStars('5')"> 5 Stars
+          <div>({{ displayRatingCount(5) }})</div>
+        </button>
+        <button type="button" class="btn btn-outline-dark" (click)="filterByRatingStars('4')"> 4 Stars
+          <div>({{ displayRatingCount(4) }})</div>
+        </button>
+        <button type="button" class="btn btn-outline-dark" (click)="filterByRatingStars('3')"> 3 Stars
+          <div>({{ displayRatingCount(3) }})</div>
+        </button>
+        <button type="button" class="btn btn-outline-dark" (click)="filterByRatingStars('2')"> 2 Stars
+          <div>({{ displayRatingCount(2) }})</div>
+        </button>
+        <button type="button" class="btn btn-outline-dark" (click)="filterByRatingStars('1')"> 1 Stars
+          <div>({{ displayRatingCount(1) }})</div>
+        </button>
+      </div>
+      <div class="mt-5" *ngFor="let feedback of feedbacks">
+        <app-card-feedback [feedback]="feedback"></app-card-feedback>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--Pagination-->
+<div class="row">
+  <div class="col-md-9">
+
+  </div>
+  <div class="row col-md-3 d-flex align-middle">
+    <div class="col-md-6">
+      <ngb-pagination [(page)]="page"
+                      [pageSize]="size"
+                      [collectionSize]="totalElements"
+                      [maxSize]="5"
+                      (pageChange)="getFeedbacks()">
+      </ngb-pagination>
+    </div>
+    <div class="col-md-6">
+      <select #myPageSelect (change)="updatePageSize(myPageSelect.value)">
+        <option>2</option>
+        <option>5</option>
+        <option selected>10</option>
+        <option>15</option>
+        <option>20</option>
+        <option>50</option>
+      </select>
+      <span>Per page</span>
+    </div>
+  </div>
+</div>

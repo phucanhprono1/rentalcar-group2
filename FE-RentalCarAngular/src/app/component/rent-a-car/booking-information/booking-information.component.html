@@ -1,0 +1,276 @@
+<app-car-booking-info [carId]="selectedCarId"></app-car-booking-info>
+<div class = "container-fluid">
+  <form [formGroup] = "profileForm" (ngSubmit) = "onSubmit()">
+    <div class = "row mt-2" formGroupName = "profile">
+      <div class="fw-bold my-3 ms-1" style="font-size: 1.5rem">Renter's information</div>
+      <div class = "col-6">
+        <div class = "mb-3 ms-3">
+          <label for = "fullName" class = "form-label">Full Name:</label>
+          <input formControlName = "nameProfile"
+                 name = "nameProfile"
+                 type = "text"
+                 class = "form-control w-50"
+                 id = "fullName"
+                 aria-describedby = "fullName">
+          <div *ngIf = "nameProfile?.invalid && (nameProfile?.dirty || nameProfile?.touched)"
+               class = "alert alert-danger mt-1 w-50">
+            <div *ngIf = "nameProfile?.errors?.['required'] && nameProfile?.errors?.['notOnlyWhitespace']">
+              Name is required
+            </div>
+          </div>
+        </div>
+        <div class = "mb-3 ms-3">
+          <label for = "phone" class = "form-label">Phone number: <span class = "text-danger">*</span></label>
+          <input formControlName = "phone" type = "text" class = "form-control w-50" id = "phone">
+          <div *ngIf = "phone?.invalid && (phone?.dirty || phone?.touched)" class = "alert alert-danger mt-1 w-50">
+            <div *ngIf = "phone?.errors?.['required']">
+              Phone is required
+            </div>
+            <div *ngIf = "phone?.errors?.['pattern']">
+              Phone must be a valid format
+            </div>
+          </div>
+        </div>
+        <div class = "mb-3 ms-3">
+          <label for = "nationalNo" class = "form-label">National ID No.: <span class = "text-danger">*</span></label>
+          <input formControlName = "nationalNo" type = "text" class = "form-control w-50" id = "nationalNo">
+          <div *ngIf = "nationalNo?.invalid && (nationalNo?.dirty || nationalNo?.touched)"
+               class = "alert alert-danger mt-1 w-50">
+            <div *ngIf = "nationalNo?.errors?.['required']">
+              National number is required
+            </div>
+            <div *ngIf = "nationalNo?.errors?.['pattern']">
+              National number must be a valid format
+            </div>
+          </div>
+        </div>
+
+        <div class = "my-3">
+          <label class = "form-label ms-3">Address</label>
+          <select formControlName = "city" class = "form-select py-2 w-75 ms-3" aria-label = "City/Province">
+            <option class="" *ngFor="let city of cities" [value]="city.cityProvinceCode">{{city.cityProvince}}</option>
+          </select>
+          <div *ngIf = "city?.invalid && (city?.dirty || city?.touched) && city?.value==='' "
+               class = "alert alert-danger py-2 w-75 ms-3">
+            You must select a city
+          </div>
+          <div class = "my-3 ">
+            <select formControlName = "district" class = "form-select py-2 w-75 ms-3" aria-label = "District">
+              <option *ngFor="let district of districts" [value]="district.districtCode">{{ district.district }}
+
+            </select>
+            <div *ngIf = "district?.invalid && (district?.dirty || district?.touched) && district?.value===''"
+                 class = "py-2 w-75 ms-3 alert alert-danger">
+              You must select a district
+            </div>
+          </div>
+          <div class = "my-3 ">
+            <select formControlName = "ward" class = "form-select py-2 w-75 ms-3 py-2 w-75 ms-3" aria-label = "Ward">
+              <option *ngFor="let ward of wards" [value]="ward.wardCode">{{ ward.ward }}</option>
+            </select>
+            <div *ngIf = "ward?.invalid && (ward?.dirty || ward?.touched) && ward?.value==='' "
+                 class = "alert alert-danger  py-2 w-75 ms-3 py-2 w-75 ms-3">
+              You must select a ward
+            </div>
+          </div>
+          <input formControlName = "house"
+                 type = "text"
+                 class = "form-control w-75 ms-3"
+                 id = "houseStreet"
+                 placeholder = "House number, Street">
+          <div *ngIf = "house?.invalid && (house?.dirty || house?.touched)"
+               class = "alert alert-danger mt-1 ms-3 w-75">
+            <div *ngIf = "house?.errors?.['required'] && house?.errors?.['notOnlyWhitespace']">
+              House number and Street is required
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class = "col-6">
+        <div class = "mb-3">
+          <label for = "dateOfBirth" class = "form-label">Date of birth:</label>
+          <input formControlName = "dateOfBirth"
+                 type = "date"
+                 class = "form-control w-50"
+                 id = "dateOfBirth"
+                 aria-describedby = "emailHelp">
+          <div *ngIf = "dateOfBirth?.invalid && (dateOfBirth?.dirty || dateOfBirth?.touched)"
+               class = "alert alert-danger w-50">
+            <div *ngIf = "dateOfBirth?.hasError('required') ">
+              Date of birth is required
+            </div>
+            <div *ngIf = "dateOfBirth?.hasError('invalidDate') ">
+              You must be older than 18 years old
+            </div>
+          </div>
+        </div>
+        <div class = "mb-3">
+          <label for = "email" class = "form-label">Email address: <span class = "text-danger">*</span></label>
+          <input type = "text" class = "form-control w-50" id = "email"  formControlName = "email">
+          <div *ngIf="email?.invalid && (email?.dirty || email?.touched) && !email?.pending" class="alert alert-danger mt-1 w-50">
+            <div *ngIf="email?.errors?.['required']">
+              Email is required
+            </div>
+            <div *ngIf="email?.errors?.['pattern']">
+              Email must be a valid email format
+            </div>
+          </div>
+        </div>
+        <div class = "mb-3">
+          <label for = "license" class = "form-label">Driving license:</label>
+          <input formControlName = "drivingLicense" type = "file" class = "form-control w-50" id = "license"
+                 (change) = "onFileSelected($event)">
+
+          <div *ngIf = "filePreviewUrl" class = "mt-2">
+            <img [src] = "filePreviewUrl" alt = "File Preview" style = "max-width: 400px; max-height: 300px;">
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input ms-2" type="checkbox" checked value="" id="flexCheckDefault" (change)="onCheckboxChange($event)">
+      <label class="form-check-label ms-1" for="flexCheckDefault">
+        Different than the renter's information
+      </label>
+    </div>
+    <div *ngIf="showDriverForm" class = "row" formGroupName = "profileDriver">
+      <div class="fw-bold my-2 ms-3" style="font-size: 1.5rem">Driver's information</div>
+      <div class = "col-6">
+        <div class = "mb-3 ms-3">
+          <label for = "fullNameDriver" class = "form-label">Full Name:</label>
+          <input formControlName = "nameProfileDriver"
+                 name = "nameProfile"
+                 type = "text"
+                 class = "form-control w-50"
+                 id = "fullNameDriver"
+                 aria-describedby = "fullName">
+          <div *ngIf = "nameProfileDriver?.invalid && (nameProfileDriver?.dirty || nameProfileDriver?.touched)"
+               class = "alert alert-danger mt-1 w-50">
+            <div *ngIf = "nameProfileDriver?.errors?.['required'] && nameProfileDriver?.errors?.['notOnlyWhitespace']">
+              Name is required
+            </div>
+          </div>
+        </div>
+        <div class = "mb-3 ms-3">
+          <label for = "phoneDriver" class = "form-label">Phone number: <span class = "text-danger">*</span></label>
+          <input formControlName = "phoneDriver" type = "text" class = "form-control w-50" id = "phoneDriver">
+          <div *ngIf = "phoneDriver?.invalid && (phoneDriver?.dirty || phoneDriver?.touched)"
+               class = "alert alert-danger mt-1 w-50">
+            <div *ngIf = "phoneDriver?.errors?.['required']">
+              Phone is required
+            </div>
+            <div *ngIf = "phoneDriver?.errors?.['pattern']">
+              Phone must be a valid format
+            </div>
+          </div>
+        </div>
+        <div class = "mb-3 ms-3">
+          <label for = "nationalNoDriver" class = "form-label">National ID No.:
+            <span class = "text-danger">*</span></label>
+          <input formControlName = "nationalNoDriver" type = "text" class = "form-control w-50" id = "nationalNoDriver">
+          <div *ngIf = "nationalNoDriver?.invalid && (nationalNoDriver?.dirty || nationalNoDriver?.touched)"
+               class = "alert alert-danger mt-1 w-50">
+            <div *ngIf = "nationalNoDriver?.errors?.['required']">
+              National number is required
+            </div>
+            <div *ngIf = "nationalNoDriver?.errors?.['pattern']">
+              National number must be a valid format
+            </div>
+          </div>
+        </div>
+
+        <div class = "my-3">
+          <label class = "form-label ms-3">Address</label>
+          <select formControlName = "cityDriver" class = "form-select py-2 w-75 ms-3" aria-label = "City/Province">
+            <option class="" *ngFor="let city of citiesDriver" [value]="city.cityProvinceCode">{{city.cityProvince}}</option>
+
+          </select>
+          <div *ngIf = "cityDriver?.invalid && (cityDriver?.dirty || cityDriver?.touched) && cityDriver?.value==='' "
+               class = "alert alert-danger py-2 w-75 ms-3">
+            You must select a city
+          </div>
+          <div class = "my-3 ">
+            <select formControlName = "districtDriver" class = "form-select py-2 w-75 ms-3" aria-label = "District">
+              <option *ngFor="let district of districtsDriver" [value]="district.districtCode">{{ district.district }}
+
+            </select>
+            <div *ngIf = "districtDriver?.invalid && (districtDriver?.dirty || districtDriver?.touched) && districtDriver?.value===''"
+                 class = "py-2 w-75 ms-3 alert alert-danger">
+              You must select a district
+            </div>
+          </div>
+          <div class = "my-3 ">
+            <select formControlName = "wardDriver"
+                    class = "form-select py-2 w-75 ms-3 py-2 w-75 ms-3"
+                    aria-label = "Ward">
+              <option *ngFor="let ward of wardsDriver" [value]="ward.wardCode">{{ ward.ward }}</option>
+            </select>
+            <div *ngIf = "wardDriver?.invalid && (wardDriver?.dirty || wardDriver?.touched) && wardDriver?.value==='' "
+                 class = "alert alert-danger  py-2 w-75 ms-3 py-2 w-75 ms-3">
+              You must select a ward
+            </div>
+          </div>
+          <input formControlName = "houseDriver"
+                 type = "text"
+                 class = "form-control w-75 ms-3"
+                 id = "houseStreetDriver"
+                 placeholder = "House number, Street">
+          <div *ngIf = "houseDriver?.invalid && (houseDriver?.dirty || houseDriver?.touched)"
+               class = "alert alert-danger mt-1 ms-3 w-75">
+            <div *ngIf = "houseDriver?.errors?.['required'] && houseDriver?.errors?.['notOnlyWhitespace']">
+              House number and Street is required
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class = "col-6">
+        <div class = "mb-3">
+          <label for = "dateOfBirthDriver" class = "form-label">Date of birth:</label>
+          <input formControlName = "dateOfBirthDriver"
+                 type = "date"
+                 class = "form-control w-50"
+                 id = "dateOfBirthDriver"
+                 aria-describedby = "emailHelp">
+          <div *ngIf = "dateOfBirthDriver?.invalid && (dateOfBirthDriver?.dirty || dateOfBirthDriver?.touched)"
+               class = "alert alert-danger w-50">
+            <div *ngIf = "dateOfBirthDriver?.hasError('required') ">
+              Date of birth is required
+            </div>
+            <div *ngIf = "dateOfBirthDriver?.hasError('invalidDate') ">
+              You must be older than 18 years old
+            </div>
+          </div>
+        </div>
+        <div class = "mb-3">
+          <label for = "emailDriver" class = "form-label">Email address: <span class = "text-danger">*</span></label>
+          <input type = "text" class = "form-control w-50" id = "emailDriver"  formControlName = "emailDriver">
+          <div *ngIf="emailDriver?.invalid && (emailDriver?.dirty || emailDriver?.touched) && !emailDriver?.pending" class="alert alert-danger mt-1 w-50">
+            <div *ngIf="emailDriver?.errors?.['required']">
+              Email is required
+            </div>
+            <div *ngIf="emailDriver?.errors?.['pattern']">
+              Email must be a valid email format
+            </div>
+          </div>
+        </div>
+        <div class = "mb-3">
+          <label for = "licenseDriver" class = "form-label">Driving license:</label>
+          <input formControlName = "drivingLicenseDriver" type = "file" class = "form-control w-50" id = "licenseDriver"
+                 (change) = "onFileSelectedDriver($event)">
+
+          <div *ngIf = "filePreviewDriverUrl" class = "mt-2">
+            <img [src] = "filePreviewDriverUrl" alt = "File Preview" style = "max-width: 400px; max-height: 300px;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class = "row mt-4">
+      <div class = "col  d-flex justify-content-center w-100">
+        <button (click)="navigate('/customer')" type = "button" class = "btn btn-outline-light text-dark text-decoration-underline mx-3">Cancel
+        </button>
+        <button type = "submit" class = "btn btn-primary" style = "width: 10%" >Next</button>
+      </div>
+    </div>
+  </form>
+</div>

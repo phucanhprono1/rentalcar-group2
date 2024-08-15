@@ -1,0 +1,22 @@
+<div class="file-list">
+  <div *ngFor="let file of fileData; let i = index" class="file-container">
+    <div class="file-name">
+      {{ file.name }}
+      <i class="bi bi-x-square" (click)="removeFile(i)"></i>
+    </div>
+    <div *ngIf="file.type.startsWith('image/')">
+      <img [src]="getFileUrl(file)" alt="Preview" class="file-preview-image" />
+    </div>
+    <div *ngIf="file.type === 'application/pdf'" class="file-preview-icon">
+      <i class="bi bi-file-earmark-pdf fs-3"></i>
+      <a [href]="getFileUrl(file)" target="_blank">View PDF</a>
+    </div>
+    <div *ngIf="file.type === 'application/msword' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'" class="file-preview-icon">
+      <i class="bi bi-file-earmark-word fs-3"></i>
+      <a [href]="getFileUrl(file)" target="_blank">View Document</a>
+    </div>
+    <div *ngIf="!file.type.startsWith('image/') && file.type !== 'application/pdf' && file.type !== 'application/msword' && file.type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'" class="file-preview-icon">
+      <i class="bi bi-archive-fill fs-3"></i>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+#no-rating{
+  margin-left: 70px;
+}
+#no-of-ride{
+  margin-top: -15px;
+}
+.active-link {
+  background-color: var(--bs-primary);
+}

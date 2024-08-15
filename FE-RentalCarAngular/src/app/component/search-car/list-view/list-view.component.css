@@ -1,0 +1,145 @@
+html,
+body,
+.intro {
+  height: 100%;
+}
+
+.table-responsive {
+  margin-top: 20px;
+}
+
+.table-bordered th,
+.table-bordered td {
+  padding: 12px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.carousel {
+  width: 150px; /* Adjust width as needed */
+  height: 100px; /* Adjust height as needed */
+  overflow: hidden;
+  margin: auto;
+}
+
+.carousel-inner img {
+  width: 100%;
+  height: auto;
+}
+
+.carousel-indicators {
+  bottom: -20px; /* Adjust as needed to position indicators */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.badge {
+  padding: 8px;
+  font-size: 12px;
+}
+
+.btn {
+  width: 100px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+
+.btn-primary.mb-2 {
+  margin-bottom: 10px;
+}
+table th:nth-child(1),
+table td:nth-child(1) {
+  width: 5%;
+}
+
+table th:nth-child(2),
+table td:nth-child(2) {
+  width: 15%;
+}
+
+table th:nth-child(3),
+table td:nth-child(3) {
+  width: 10%;
+}
+
+table th:nth-child(4),
+table td:nth-child(4) {
+  width: 10%;
+}
+
+table th:nth-child(5),
+table td:nth-child(5) {
+  width: 5%;
+}
+
+table th:nth-child(6),
+table td:nth-child(6) {
+  width: 5%;
+}
+
+table th:nth-child(7),
+table td:nth-child(7) {
+  width: 20%;
+}
+
+table th:nth-child(8),
+table td:nth-child(8) {
+  width: 5%;
+}
+
+table th:nth-child(9),
+table td:nth-child(9) {
+  width: 25%;
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    width: 80px; /* Adjust width for smaller screens */
+    height: 80px; /* Adjust height for smaller screens */
+  }
+
+  .btn {
+    width: 80px;
+  }
+}
+
+.container-size {
+  width: 100%; /* Adjusts to the width of its container */
+  max-width: 650px; /* Maximum width */
+  height: auto; /* Maintains aspect ratio */
+  position: relative; /* Required for absolute positioning of carousel items */
+}
+
+.carousel-item {
+  width: 100%;
+  padding-top: 65%; /* Aspect ratio 16:9, can be adjusted */
+  position: relative; /* Required for absolute positioning of images */
+}
+
+.carousel-item img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image covers the entire container */
+}
+

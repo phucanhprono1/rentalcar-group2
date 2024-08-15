@@ -1,0 +1,56 @@
+<div class="container-fluid border-black border-top border-bottom fw-bold" *ngIf="cars.length>0">
+  <div class="row p-5" *ngFor="let car of cars">
+    <div class="col-md-6">
+      <div id="carouselExampleIndicators{{car.id}}" class="carousel slide">
+        <div class="carousel-indicators">
+          <button *ngFor="let image of car.images; let i = index"
+                  type="button"
+                  [attr.data-bs-target]="'#carouselExampleIndicators' + car.id"
+                  [attr.data-bs-slide-to]="i"
+                  [class.active]="i === 0"
+                  [attr.aria-label]="'Slide ' + (i + 1)">
+          </button>
+        </div>
+        <div class="carousel-inner container-size">
+          <div *ngFor="let imageUrl of car.images; let i = index" class="carousel-item" [class.active]="i === 0">
+            <img [src]="imageUrl" class="d-block w-100 h-100 img-thumbnail" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#carouselExampleIndicators' + car.id" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#carouselExampleIndicators' + car.id" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <h2 class="mb-4">{{car.name}}</h2>
+      <div class="ratings-container">
+        <span class="me-2">Ratings: </span>
+        <app-car-rating-star [rating]="car.ratings"></app-car-rating-star>
+      </div>
+      <p id="no-rating" *ngIf="car.ratings===0">(No rating yet)</p>
+      <p id="no-of-ride">No of ride: <span>{{car.noOfRide}}</span></p>
+      <p>Prices: <span>{{ car.basePrice| vnMoneyFormatter}}/day</span></p>
+      <p>Location: <span>{{car.address}}</span></p>
+      <p>Status:
+        <span *ngIf="car.carStatus == 'AVAILABLE'" style="color: green">Available</span>
+        <span *ngIf="car.carStatus == 'BOOKED'" style="color: blue">Booked</span>
+        <span *ngIf="car.carStatus == 'STOPPED'" style="color: red">Stopped</span>
+      </p>
+    </div>
+
+    <div class="col-md-2 d-flex flex-column">
+      <button class="btn btn-primary border-black w-100 mb-3"  (click)="getId(car.id)">Rent now</button>
+      <button class="btn btn-primary border-black w-100 mb-3" [routerLink]="'/customer/search-car/view-detail/'+car.id">View details</button>
+    </div>
+  </div>
+</div>
+<div class="container-fluid" *ngIf="cars.length===0">
+  <h3 class="text-danger ms-5">
+    No cars match your credentials, please try again.
+  </h3>
+</div>

@@ -1,0 +1,70 @@
+<div class="container-fluid bg-light">
+  <form class="p-5" [formGroup]="stepThreeForm" (ngSubmit)="onSubmit()">
+    <div class="mb-4">
+      <div class="d-flex flex-row align-items-center">
+        <label class="w-25 fw-bold">Set base price for your car:<span class="text-danger ms-2">*</span></label>
+        <input formControlName="basePrice" [value]="basePrice" type="text" class="form-control w-25">
+        <label class="ms-3 fw-bold">VND/Day</label>
+      </div>
+      <div *ngIf="basePrice?.invalid && (basePrice?.dirty || basePrice?.touched)" class="alert alert-danger mt-1 d-block w-25 float-to-end">
+        <div *ngIf="basePrice?.errors?.['required'] || basePrice?.errors?.['notOnlyWhitespace']">
+          Base price is required
+        </div>
+        <div *ngIf="basePrice?.errors?.['pattern']">
+          Base price is invalid format
+        </div>
+      </div>
+    </div>
+    <div class="mb-5">
+      <div class="d-flex flex-row align-items-center">
+        <label class="w-25 fw-bold">Required deposit:<span class="text-danger ms-2">*</span></label>
+        <input formControlName="deposit" [value]="deposit" type="text" class="form-control w-25">
+        <label class="ms-3 fw-bold">VND</label>
+      </div>
+      <div *ngIf="deposit?.invalid && (deposit?.dirty || deposit?.touched)" class="alert alert-danger mt-1 d-block w-25 float-to-end">
+        <div *ngIf="deposit?.errors?.['required'] || deposit?.errors?.['notOnlyWhitespace']">
+          Deposit is required
+        </div>
+        <div *ngIf="deposit?.errors?.['pattern']">
+          Deposit is invalid format
+        </div>
+      </div>
+    </div>
+    <h5 class="mt-5 mb-5">Term of use</h5>
+    <div class="row" formGroupName="termOfUse">
+      <div class="col-md-3">
+        <div class="form-check mb-2">
+          <input type="checkbox" class="form-check-input" formControlName="noSmoking" value="noSmoking" id="noSmoking">
+          <label class="form-check-label" for="noSmoking">No smoking</label>
+        </div>
+        <div class="form-check mb-2">
+          <input type="checkbox" formControlName="noPet" class="form-check-input" value="noPet" id="noPet">
+          <label class="form-check-label" for="noPet">No pet</label>
+        </div>
+        <div class="form-check mb-2">
+          <input type="checkbox" formControlName="noFood" class="form-check-input" value="noFood" id="noFood">
+          <label class="form-check-label" for="noFood">No food in car</label>
+        </div>
+        <div class="form-check mb-2">
+          <input type="checkbox" formControlName="other" class="form-check-input" id="other" (change)="onOtherChange()">
+          <label class="form-check-label" for="other">Other</label>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="mb-3">
+          <label for="specify" class="fw-bold">Please specify:</label>
+          <textarea id="specify" formControlName="specifyOther" [value]="specifyOther" class="form-control w-50" rows="4"></textarea>
+          <div *ngIf="specifyOther?.invalid && (specifyOther?.dirty || specifyOther?.touched)" class="alert alert-danger mt-1 w-50">
+            <div *ngIf="specifyOther?.errors?.['required']">
+              Please specify the other term of use!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center p-5">
+      <button type="button" (click)="navigate('/car-owner')" class="btn btn-link me-3">Cancel</button>
+      <button type="submit" class="btn btn-primary">Next</button>
+    </div>
+  </form>
+</div>

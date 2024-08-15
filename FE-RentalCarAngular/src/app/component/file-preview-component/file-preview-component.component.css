@@ -1,0 +1,26 @@
+.file-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.file-container {
+  margin: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.file-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.file-preview-image {
+  max-width: 100px;
+  max-height: 100px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+

@@ -1,0 +1,19 @@
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="ms-5 p-4" *ngIf="breadcrumbs.length>1">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/car-owner" *ngIf="role==='ROLE_CAR_OWNER'">
+        Home
+      </a>
+      <a routerLink="/customer" *ngIf="role==='ROLE_CUSTOMER'">
+        Home
+      </a>
+      <a routerLink="" *ngIf="role===''">
+        Home
+      </a>
+    </li>
+    <li class="breadcrumb-item" *ngFor="let breadcrumb of breadcrumbs , let last = last" [ngClass]="{ 'active': last }">
+      <a *ngIf="!last" [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+      <span *ngIf="last" [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</span>
+    </li>
+  </ol>
+</nav>

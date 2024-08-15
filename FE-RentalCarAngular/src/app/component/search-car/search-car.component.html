@@ -1,0 +1,111 @@
+<div class="container-fluid bg-secondary" id="top">
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <div class="row p-3 mx-2">
+      <h3 class="mb-3 text-white fs-5 mt-3">PICK-UP LOCATION</h3>
+      <input type="text" class="form-control w-75 ms-2" formControlName="pickUpLocation" placeholder="Enter your location">
+    </div>
+    <div *ngIf="pickUpLocation?.invalid && (pickUpLocation?.dirty || pickUpLocation?.touched)" class="alert alert-danger mt-1 d-block w-75 ms-4">
+      <div *ngIf="pickUpLocation?.errors?.['required'] || pickUpLocation?.errors?.['notOnlyWhitespace']">
+        Please enter location
+      </div>
+    </div>
+    <div class="row mx-2">
+      <div class="col-md-6 p-3">
+        <h3 class="mb-3 text-white fs-5 ms-2">PICK-UP DATE AND TIME</h3>
+        <div class="d-flex flex-row">
+          <input type="date" formControlName="pickUpDate" class="form-control me-2 ms-2">
+          <i class="bi bi-calendar-heart text-dark fs-3 me-2"></i>
+          <input type="time" formControlName="pickUpTime" class="form-control">
+        </div>
+        <div *ngIf="(pickUpDate?.invalid || pickUpTime?.invalid) && (pickUpDate?.dirty || pickUpDate?.touched || pickUpTime?.dirty || pickUpTime?.touched)" class="alert alert-danger mt-1 d-block w-100 ms-1">
+          <div *ngIf="pickUpDate?.errors?.['required'] || pickUpTime?.errors?.['required']">
+            Please enter pick-up date and time
+          </div>
+        </div>
+        <div *ngIf="searchForm.errors?.['pickUpDateTimePast']" class="alert alert-danger mt-1 d-block w-100">
+          Pick-up date and time cannot be before current time.
+        </div>
+      </div>
+      <div class="col-md-6 p-3">
+        <h3 class="mb-3 text-white fs-5">DROP-OFF DATE AND TIME</h3>
+        <div class="d-flex flex-row">
+          <input type="date" formControlName="dropOffDate" class="form-control me-2 ms-2">
+          <i class="bi bi-calendar-heart text-dark fs-3 me-2"></i>
+          <input type="time" formControlName="dropOffTime" class="form-control">
+        </div>
+        <div *ngIf="(dropOffDate?.invalid || dropOffTime?.invalid) && (dropOffDate?.dirty || dropOffDate?.touched || dropOffTime?.dirty || dropOffTime?.touched)" class="alert alert-danger mt-1 d-block w-100 ms-1">
+          <div *ngIf="dropOffDate?.errors?.['required'] || dropOffTime?.errors?.['required']">
+            Please enter drop-off date and time
+          </div>
+        </div>
+        <div *ngIf="searchForm.errors?.['dropOffBeforePickUp']" class="alert alert-danger mt-1 d-block w-100">
+          Drop-off date and time cannot be before pick-up date and time.
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button class="btn btn-primary mt-4 w-25 p-2 mb-4" type="submit">Search</button>
+    </div>
+  </form>
+
+
+</div>
+<div class="container-fluid p-4">
+  <h4>Search Results </h4>
+  <div class="d-flex justify-content-between align-items-center mt-4">
+    <p class="ms-5">There're are {{totalCars}} cars that are available for you</p>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row justify-content-between me-5">
+          <i class="bi bi-grid-fill fs-3 me-3 btn" routerLink="thumbnail-view" routerLinkActive="active-link"></i>
+          <i class="bi bi-list-check fs-3 btn" routerLink="list-view" routerLinkActive="active-link"></i>
+        </div>
+        <select name="sorting" id="sorting" class="form-select w-auto me-5 border-black" (change)="onSortByChange($event)">
+          <option value="" selected>Newest to oldest</option>
+          <option value="LAST_MODIFIED_DATE_ASC">Oldest to newest</option>
+          <option value="BASE_PRICE_DESC">Price highest to lowest</option>
+          <option value="BASE_PRICE_ASC">Price lowest to highest</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Booking list-->
+<router-outlet></router-outlet>
+
+<!--Pagination-->
+<div class="container-fluid d-flex justify-content-center mt-5 mb-5">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination mb-0">
+      <li class="page-item" [class.disabled]="currentPage === 0">
+        <a class="page-link" (click)="onPageChange({page: currentPage - 1})" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(carsPage.totalPages); let i = index" [class.active]="i === currentPage">
+        <a class="page-link" (click)="onPageChange({page: i})">{{ i + 1 }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === carsPage.totalPages - 1">
+        <a class="page-link" (click)="onPageChange({page: currentPage + 1})" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="row align-items-center ms-5">
+    <div class="col-auto">
+      <select id="pageSize" class="form-select" (change)="onPageSizeChange($event)">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <label id="perPage" class="col-form-label">Per page</label>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,95 @@
+<app-car-booking-info [carId] = "selectedCarId"></app-car-booking-info>
+<div class = "container-fluid">
+  <div class = "row">
+    <div class = "fw-bold mt-3">Please select your payment method</div>
+    <div class = "col ">
+      <form class = "my-3 ms-5" [formGroup] = "checkForm" (ngSubmit) = "onSubmit()">
+        <div class = "form-check">
+          <input
+            formControlName = "paymentMethod"
+            class = "form-check-input border border-dark"
+            type = "radio" name = "paymentMethod"
+            id = "flexRadioDefault1"
+            value = "MY_WALLET" checked>
+          <label class = "form-check-label" for = "flexRadioDefault1">
+            My Wallet
+          </label>
+          <div class = "mt-2 ms-1 fst-italic " style = "font-size: 0.8rem">
+            <div *ngIf = "balance>=deposit">
+              Current balance:
+              <span class = "fw-bold" style = "color: #03fc0b">{{ balance| number:'1.0-0' }} VND
+              </span>
+            </div>
+            <div *ngIf = "balance<deposit">
+              Current balance:
+              <span class = "fw-bold" style = "color: #d41706">{{ balance| number:'1.0-0' }} VND
+              </span>
+              <span class = "text-danger fst-italic">(insufficient)</span>
+            </div>
+          </div>
+          <div *ngIf="!isBalanceSufficient" class="alert alert-danger mt-1 w-50">
+            Please go to My wallet to top up and try again
+          </div>
+        </div>
+        <div class = "form-check">
+          <input value = "CASH"
+                 formControlName = "paymentMethod"
+                 class = "form-check-input border border-dark"
+                 type = "radio"
+                 name = "paymentMethod"
+                 id = "flexRadioDefault2">
+          <label class = "form-check-label" for = "flexRadioDefault2">
+            Cash
+          </label>
+          <div class = "mt-2 ms-1 fst-italic" style = "font-size: 0.8rem">Our operator will contact you for further
+                                                                          instruction
+          </div>
+        </div>
+        <div class = "form-check">
+          <input value = "BANK_TRANSFER"
+                 formControlName = "paymentMethod"
+                 class = "form-check-input border border-dark"
+                 type = "radio"
+                 name = "paymentMethod"
+                 id = "flexRadioDefault3">
+          <label class = "form-check-label" for = "flexRadioDefault3">
+            Bank transfer
+          </label>
+          <div class = "mt-2 ms-1 fst-italic" style = "font-size: 0.8rem">Our operator will contact you for further instruction
+          </div>
+        </div>
+        <div *ngIf = "paymentMethod?.invalid && (paymentMethod?.dirty || paymentMethod?.touched)"
+             class = "alert alert-danger mt-1 w-50">
+          <div *ngIf = "paymentMethod?.errors?.['required']">
+            You must pick a payment method
+          </div>
+        </div>
+        <div class = "row mt-4">
+          <div class = "col  d-flex justify-content-center w-100">
+            <button (click) = "navigate('/customer/rent-a-car/booking-info')"
+                    type = "button"
+                    class = "btn btn-outline-light text-dark text-decoration-underline mx-3">Cancel
+            </button>
+            <button type = "submit" class = "btn btn-primary" style = "width: 15%">Confirm payment</button>
+          </div>
+          <div #successWindow class = "modal fade"
+               id = "exampleModal"
+               tabindex = "-1"
+               aria-labelledby = "exampleModalLabel"
+               aria-hidden = "true">
+            <div class = "modal-dialog modal-dialog-centered modal-sm">
+              <div class = "modal-content ">
+                <div class = "modal-body text-center ">
+                  Success! We will direct you to next step
+                </div>
+                <div class = "modal-footer">
+                  <button type = "button" class = "btn btn-outline-light text-dark  w-100" data-bs-dismiss = "modal">OK</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

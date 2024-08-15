@@ -1,0 +1,25 @@
+<div class="card">
+  <div class="card-body row">
+    <div class="col-md-9">
+      <h5 class="card-title"><i class="bi bi-person-fill"></i> {{ feedback.customer }}</h5>
+      <!--      <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>-->
+      <p class="card-text">{{ feedback.content }}</p>
+      <div class="row">
+        <div class="col-md-6">
+          <img src="{{ feedback.image }}" alt="car photo" style="width: 70%">
+        </div>
+        <div class="col-md-6">
+          <strong>{{ feedback.carName }}</strong>
+          <ul>
+            <li>From: {{ formatDateTime(feedback.startDate) }}</li>
+            <li>To: {{ formatDateTime(feedback.endDate) }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 d-grid justify-content-center align-content-center">
+      <app-car-rating-star [rating]="feedback.ratings"></app-car-rating-star>
+      <div style="margin-bottom: 100px"><p class="card-text">{{ formatDateTime(feedback.dateTime) }}</p></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="star-rating">
+  <i *ngFor="let star of fullStar" class="bi bi-star-fill"></i>
+  <i *ngIf="halfStar" class="bi bi-star-half"></i>
+  <i *ngFor="let star of emptyStar" class="bi bi-star"></i>
+  <div class="div">
+    <span *ngIf="rating === null">(No ratings yet)</span>
+  </div>
+</div>
