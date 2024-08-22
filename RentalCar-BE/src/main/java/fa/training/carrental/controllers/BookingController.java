@@ -4,6 +4,7 @@ import fa.training.carrental.dto.BookingCarResponse;
 import fa.training.carrental.dto.ListBookingDto;
 import fa.training.carrental.dto.UpdateBookingStatusRequest;
 import fa.training.carrental.dto.bookingdto.BookingCarRequest;
+import fa.training.carrental.dto.bookingdto.BookingKafkaMessage;
 import fa.training.carrental.dto.bookingdto.EditBookingDto;
 import fa.training.carrental.entities.Booking;
 import fa.training.carrental.entities.Car;
@@ -21,8 +22,11 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +34,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
+import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -40,12 +47,13 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/bookings")
-@RequiredArgsConstructor
 @Slf4j
 public class BookingController {
     private final BookingService bookingService;
@@ -54,7 +62,21 @@ public class BookingController {
     private final CarService carService;
     private final WalletService walletService;
     private final CarRepository carRepository;
+    private final KafkaTemplate<String, BookingCarRequest> kafkaTemplate;
+    private final ReplyingKafkaTemplate<String, BookingKafkaMessage, BookingCarResponse> replyingKafkaTemplate;
     Logger logger = LoggerFactory.getLogger(BookingController.class);
+    @Autowired
+    public BookingController(BookingService bookingService, CustomerRepository customerRepository, BookingRepository bookingRepository, CarService carService, WalletService walletService, CarRepository carRepository, KafkaTemplate<String, BookingCarRequest> kafkaTemplate, ReplyingKafkaTemplate<String, BookingKafkaMessage, BookingCarResponse> replyingKafkaTemplate) {
+        this.bookingService = bookingService;
+        this.customerRepository = customerRepository;
+        this.bookingRepository = bookingRepository;
+        this.carService = carService;
+        this.walletService = walletService;
+        this.carRepository = carRepository;
+        this.kafkaTemplate = kafkaTemplate;
+        this.replyingKafkaTemplate = replyingKafkaTemplate;
+    }
+
     @GetMapping("/view-all-by-current-customer")
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<?> viewAllBookingsByCurrentCustomer(
@@ -78,7 +100,7 @@ public class BookingController {
                                            @RequestPart(name = "customerDriverLicense", required = false) MultipartFile customerDriverLicense,
                                            @RequestPart(name = "customerDriverDriverLicense", required = false) MultipartFile customerDriverDriverLicense,
                                            @RequestPart(name = "bookingCarRequest") @Valid BookingCarRequest bookingCarRequest,
-                                           BindingResult bindingResult) {
+                                           BindingResult bindingResult)throws ExecutionException, InterruptedException {
         Map<String, String> errors = new HashMap<>();
 
         // Debugging Statements
@@ -107,13 +129,22 @@ public class BookingController {
 
 
         System.out.println(bookingCarRequest);
-        BookingCarResponse bookingCarResponse = bookingService.bookCar(bookingCarRequest, customerDriverLicense, customerDriverDriverLicense);
-        if(bookingCarResponse.getBookingNo() != null){
-            return new ResponseEntity<>(bookingCarResponse, HttpStatus.CREATED);
+        BookingKafkaMessage bookingKafkaMessage = null;
+        try {
+            bookingKafkaMessage = new BookingKafkaMessage(bookingCarRequest, customerDriverLicense, customerDriverDriverLicense);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        else {
-            return ResponseEntity.badRequest().body(bookingCarResponse);
-        }
+
+        // Send the message and receive the reply
+        RequestReplyFuture<String, BookingKafkaMessage, BookingCarResponse> future =
+                replyingKafkaTemplate.sendAndReceive(new ProducerRecord<>("bookings", bookingKafkaMessage));
+
+        // Wait for the reply from the consumer
+        ConsumerRecord<String, BookingCarResponse> response = future.get();
+
+        // Return the response back to the client
+        return new ResponseEntity<>(response.value(), HttpStatus.CREATED);
     }
     @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping("/{bookingNo}")

@@ -3,6 +3,7 @@ package fa.training.carrental.services.impl;
 import fa.training.carrental.dto.*;
 import fa.training.carrental.dto.bookingdto.AbstractBooking;
 import fa.training.carrental.dto.bookingdto.BookingCarRequest;
+import fa.training.carrental.dto.bookingdto.BookingKafkaMessage;
 import fa.training.carrental.dto.bookingdto.EditBookingDto;
 import fa.training.carrental.entities.*;
 import fa.training.carrental.enums.BookingStatus;
@@ -16,6 +17,7 @@ import fa.training.carrental.services.BookingService;
 import fa.training.carrental.services.CarService;
 import fa.training.carrental.services.EmailService;
 import fa.training.carrental.services.FileGatewayService;
+import fa.training.carrental.utils.ByteArrayToMultipartFileConverter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,6 +82,16 @@ public class BookingServiceImpl extends BaseServiceImpl<Booking, String> impleme
         this.wardRepository = wardRepository;
     }
     Logger logger = Logger.getLogger(BookingServiceImpl.class.getName());
+    @KafkaListener(topics = "bookings", groupId = "bookingGroup")
+    @SendTo("bookingReplies")  // Send response to a reply topic
+    public BookingCarResponse processBooking(BookingKafkaMessage bookingKafkaMessage) {
+        BookingCarRequest bookingCarRequest = bookingKafkaMessage.getBookingCarRequest();
+        MultipartFile renterDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverLicense(), "renterDriverLicense", "image/jpeg");
+        MultipartFile renterDriverDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverDriverLicense(), "renterDriverDriverLicense", "image/jpeg");
+
+        // Call your existing bookCar method to handle booking logic
+        return bookCar(bookingCarRequest, renterDriverLicense, renterDriverDriverLicense);
+    }
     @Override
     public Page<ListBookingDto> getBookingsByCustomerId(Long customerId, Pageable pageable) {
         Page<ListBookingDto> bookings = bookingRepository.findByCustomerId(customerId, pageable);

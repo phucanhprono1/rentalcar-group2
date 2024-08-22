@@ -11,11 +11,6 @@ import java.util.List;
 @Service
 public class CarOwnerServiceImpl implements CarOwnerService {
 
-    private final CarService carService;
-    @Autowired
-    public CarOwnerServiceImpl(CarService carService) {
-        this.carService = carService;
-    }
 
     @Override
     public BigDecimal calculateMonthlyIncome(Long carOwnerId, int month, int year) {
