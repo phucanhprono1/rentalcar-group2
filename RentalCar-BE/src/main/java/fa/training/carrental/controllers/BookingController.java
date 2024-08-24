@@ -131,7 +131,9 @@ public class BookingController {
         System.out.println(bookingCarRequest);
         BookingKafkaMessage bookingKafkaMessage = null;
         try {
+            System.out.println("Creating BookingKafkaMessage");
             bookingKafkaMessage = new BookingKafkaMessage(bookingCarRequest, customerDriverLicense, customerDriverDriverLicense);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
