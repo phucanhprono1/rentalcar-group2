@@ -84,11 +84,23 @@ public class BookingServiceImpl extends BaseServiceImpl<Booking, String> impleme
     Logger logger = Logger.getLogger(BookingServiceImpl.class.getName());
     @KafkaListener(topics = "bookings", groupId = "bookingGroup")
     @SendTo("bookingReplies")  // Send response to a reply topic
+
+    @Transactional(rollbackOn = {Exception.class, Error.class, Throwable.class, RuntimeException.class})
     public BookingCarResponse processBooking(BookingKafkaMessage bookingKafkaMessage) {
         BookingCarRequest bookingCarRequest = bookingKafkaMessage.getBookingCarRequest();
-        MultipartFile renterDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverLicense(), "renterDriverLicense", "image/jpeg");
-        MultipartFile renterDriverDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverDriverLicense(), "renterDriverDriverLicense", "image/jpeg");
 
+        MultipartFile renterDriverLicense = null;
+        if(bookingKafkaMessage.getRenterDriverLicense()==null){
+        }
+        else {
+            renterDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverLicense(), "renterDriverLicense", "image/jpeg");
+        }
+        MultipartFile renterDriverDriverLicense = null;
+        if(bookingKafkaMessage.getRenterDriverDriverLicense()==null){
+        }
+        else {
+            renterDriverDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverDriverLicense(), "renterDriverDriverLicense", "image/jpeg");
+        }
         // Call your existing bookCar method to handle booking logic
         return bookCar(bookingCarRequest, renterDriverLicense, renterDriverDriverLicense);
     }
@@ -176,91 +188,112 @@ public class BookingServiceImpl extends BaseServiceImpl<Booking, String> impleme
     }
 
     @Override
-    @Transactional(rollbackOn = {Exception.class, Error.class, Throwable.class, RuntimeException.class})
+//    @Transactional(rollbackOn = {Exception.class, Error.class, Throwable.class, RuntimeException.class})
     public BookingCarResponse bookCar(BookingCarRequest bookingCarRequest, MultipartFile renterDriverLicense, MultipartFile renterDriverDriverLicense) {
-        Optional<Car> car = carRepository.findById(bookingCarRequest.getCarId());
-        Optional<Customer> customer = customerRepository.findByEmail(bookingCarRequest.getCustomerEmail());
-        Optional<Account> account = accountRepository.findByEmail(bookingCarRequest.getCustomerEmail());
+        Car car = carRepository.findById(bookingCarRequest.getCarId())
+                .orElseThrow(() -> new EntityNotFoundException("Car not found"));
+        Customer customer = customerRepository.findByEmail(bookingCarRequest.getCustomerEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+        Account account = accountRepository.findByEmail(bookingCarRequest.getCustomerEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
-        if (car.isPresent() && customer.isPresent()) {
-            LocalDateTime startDateTime = LocalDateTime.parse(bookingCarRequest.getStartDateTime());
-            LocalDateTime endDateTime = LocalDateTime.parse(bookingCarRequest.getEndDateTime());
-            if (startDateTime.isAfter(endDateTime)) {
-                return BookingCarResponse.builder()
-                        .message("Start date time cannot be after end date time")
-                        .build();
-            }
-            List<CarBooking> conflictingBookings = carBookingRepository.findConflictingBookings(car.get().getId(), startDateTime, endDateTime);
-            if (!conflictingBookings.isEmpty()) {
-                return BookingCarResponse.builder()
-                        .message("Car is already booked for the requested time range")
-                        .build();
-            }
-            if (customer.get().getWallet().compareTo(bookingCarRequest.getPaymentDeposit()) < 0 && bookingCarRequest.getPaymentMethod().equals(PaymentMethod.MY_WALLET.name())) {
-                return BookingCarResponse.builder()
-                        .message("Insufficient balance in wallet")
-                        .build();
-            }
-            updateCustomerInfo(customer.get(), bookingCarRequest, renterDriverLicense, account.get());
-            Booking booking = bookingMapper.toEntity(bookingCarRequest);
-            booking.setCustomer(customer.get());
-            bookingRepository.save(booking);
-            CarBookingId carBookingId = CarBookingId.builder()
-                    .bookingId(booking.getBookingNo())
-                    .carId(car.get().getId())
+        LocalDateTime startDateTime = LocalDateTime.parse(bookingCarRequest.getStartDateTime());
+        LocalDateTime endDateTime = LocalDateTime.parse(bookingCarRequest.getEndDateTime());
+        if (startDateTime.isAfter(endDateTime)) {
+            return BookingCarResponse.builder()
+                    .message("Start date time cannot be after end date time")
                     .build();
-            CarBooking carBooking = CarBooking.builder()
-                    .id(carBookingId)
-                    .booking(booking)
-                    .car(car.get())
-                    .build();
-            carBookingRepository.save(carBooking);
-            BookingCarResponse bookingCarResponse = bookingMapper.toResponse(bookingCarRequest);
-            bookingCarResponse.setBookingNo(booking.getBookingNo());
-            if (bookingCarRequest.getHasDriver()) {
-
-                Driver driver = createDriver(bookingCarRequest, renterDriverDriverLicense, fileUploadPath);
-                booking.setDriver(driver);
-                bookingCarResponse.setDriverId(driver.getId());
-            }
-
-            bookingCarResponse.setBookingNo(booking.getBookingNo());
-            car.get().setCarStatus(CarStatus.BOOKED);
-            if (bookingCarRequest.getPaymentMethod().equals(PaymentMethod.CASH.name())) {
-                booking.setPaymentMethod(PaymentMethod.CASH);
-                booking.setBookingStatus(BookingStatus.PENDING_DEPOSIT);
-            } else if (bookingCarRequest.getPaymentMethod().equals(PaymentMethod.BANK_TRANSFER.name())) {
-                booking.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
-                booking.setBookingStatus(BookingStatus.PENDING_DEPOSIT);
-            } else if (bookingCarRequest.getPaymentMethod().equals(PaymentMethod.MY_WALLET.name())) {
-                booking.setPaymentMethod(PaymentMethod.MY_WALLET);
-                booking.setBookingStatus(BookingStatus.CONFIRMED);
-                Transaction transactionCustomer = Transaction.builder()
-                        .amount(bookingCarRequest.getPaymentDeposit().negate())
-                        .transactionType(TransactionType.PAY_DEPOSIT)
-                        .currentBalance(customer.get().getWallet().subtract(bookingCarRequest.getPaymentDeposit()))
-                        .account(customer.get().getAccount())
-                        .booking(booking)
-                        .build();
-                transactionRepository.save(transactionCustomer);
-                Transaction transactionOwner = Transaction.builder()
-                        .amount(bookingCarRequest.getPaymentDeposit())
-                        .transactionType(TransactionType.RECEIVE_DEPOSIT)
-                        .currentBalance(car.get().getOwner().getWallet().add(bookingCarRequest.getPaymentDeposit()))
-                        .account(car.get().getOwner().getAccount())
-                        .booking(booking)
-                        .build();
-                transactionRepository.save(transactionOwner);
-                customer.get().setWallet(customer.get().getWallet().subtract(bookingCarRequest.getPaymentDeposit()));
-                Optional<CarOwner> carOwnerOptional = carOwnerRepository.findById(car.get().getOwner().getId());
-                carOwnerOptional.get().setWallet(carOwnerOptional.get().getWallet().add(bookingCarRequest.getPaymentDeposit()));
-            }
-            emailService.sendBookingConfirmationEmail(car.get().getName(), car.get().getOwner().getEmail(), car.get().getId(), LocalDateTime.now());
-            return bookingCarResponse;
         }
-        return BookingCarResponse.builder()
-                .message("Booking failed")
+        List<CarBooking> conflictingBookings = carBookingRepository.findConflictingBookings(car.getId(), startDateTime, endDateTime);
+        if (!conflictingBookings.isEmpty()) {
+            return BookingCarResponse.builder()
+                    .message("Car is already booked for the requested time range")
+                    .build();
+        }
+        if (customer.getWallet().compareTo(bookingCarRequest.getPaymentDeposit()) < 0 && bookingCarRequest.getPaymentMethod().equals(PaymentMethod.MY_WALLET.name())) {
+            return BookingCarResponse.builder()
+                    .message("Insufficient balance in wallet")
+                    .build();
+        }
+
+        updateCustomerInfo(customer, bookingCarRequest, renterDriverLicense, account);
+        customer = customerRepository.save(customer);  // Merge the updated customer
+
+        Booking booking = bookingMapper.toEntity(bookingCarRequest);
+        booking.setCustomer(customer);
+        booking = bookingRepository.save(booking);
+
+        CarBookingId carBookingId = CarBookingId.builder()
+                .bookingId(booking.getBookingNo())
+                .carId(car.getId())
                 .build();
+        CarBooking carBooking = CarBooking.builder()
+                .id(carBookingId)
+                .booking(booking)
+                .car(car)
+                .build();
+        carBookingRepository.save(carBooking);
+
+        BookingCarResponse bookingCarResponse = bookingMapper.toResponse(bookingCarRequest);
+        bookingCarResponse.setBookingNo(booking.getBookingNo());
+
+        if (bookingCarRequest.getHasDriver()) {
+            Driver driver = createDriver(bookingCarRequest, renterDriverDriverLicense, fileUploadPath);
+            booking.setDriver(driver);
+            bookingCarResponse.setDriverId(driver.getId());
+        }
+
+        car.setCarStatus(CarStatus.BOOKED);
+        carRepository.save(car);
+
+        // Handle payment method and status
+        handlePaymentMethodAndStatus(booking, bookingCarRequest, customer, car);
+
+        emailService.sendBookingConfirmationEmail(car.getName(), car.getOwner().getEmail(), car.getId(), LocalDateTime.now());
+
+        return bookingCarResponse;
+    }
+
+    private void handlePaymentMethodAndStatus(Booking booking, BookingCarRequest bookingCarRequest, Customer customer, Car car) {
+        if (bookingCarRequest.getPaymentMethod().equals(PaymentMethod.CASH.name())) {
+            booking.setPaymentMethod(PaymentMethod.CASH);
+            booking.setBookingStatus(BookingStatus.PENDING_DEPOSIT);
+        } else if (bookingCarRequest.getPaymentMethod().equals(PaymentMethod.BANK_TRANSFER.name())) {
+            booking.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
+            booking.setBookingStatus(BookingStatus.PENDING_DEPOSIT);
+        } else if (bookingCarRequest.getPaymentMethod().equals(PaymentMethod.MY_WALLET.name())) {
+            booking.setPaymentMethod(PaymentMethod.MY_WALLET);
+            booking.setBookingStatus(BookingStatus.CONFIRMED);
+            processWalletPayment(booking, bookingCarRequest, customer, car);
+        }
+        bookingRepository.save(booking);
+    }
+
+    private void processWalletPayment(Booking booking, BookingCarRequest bookingCarRequest, Customer customer, Car car) {
+        Transaction transactionCustomer = Transaction.builder()
+                .amount(bookingCarRequest.getPaymentDeposit().negate())
+                .transactionType(TransactionType.PAY_DEPOSIT)
+                .currentBalance(customer.getWallet().subtract(bookingCarRequest.getPaymentDeposit()))
+                .account(customer.getAccount())
+                .booking(booking)
+                .build();
+        transactionRepository.save(transactionCustomer);
+
+        Transaction transactionOwner = Transaction.builder()
+                .amount(bookingCarRequest.getPaymentDeposit())
+                .transactionType(TransactionType.RECEIVE_DEPOSIT)
+                .currentBalance(car.getOwner().getWallet().add(bookingCarRequest.getPaymentDeposit()))
+                .account(car.getOwner().getAccount())
+                .booking(booking)
+                .build();
+        transactionRepository.save(transactionOwner);
+
+        customer.setWallet(customer.getWallet().subtract(bookingCarRequest.getPaymentDeposit()));
+        customerRepository.save(customer);
+
+        CarOwner carOwner = car.getOwner();
+        carOwner.setWallet(carOwner.getWallet().add(bookingCarRequest.getPaymentDeposit()));
+        carOwnerRepository.save(carOwner);
     }
     @Override
     public BookingDetailsDto getBookingDetails(Long customerId, String bookingId) {
