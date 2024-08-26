@@ -87,34 +87,34 @@ public class BookingServiceImpl extends BaseServiceImpl<Booking, String> impleme
         this.wardRepository = wardRepository;
     }
     Logger logger = Logger.getLogger(BookingServiceImpl.class.getName());
-    @KafkaListener(topics = "bookings", groupId = "bookingGroup")
-    @SendTo("bookingReplies")
-    @Transactional(rollbackOn = {Exception.class, Error.class, Throwable.class, RuntimeException.class})
-    public BookingCarResponse processBooking(BookingKafkaMessage bookingKafkaMessage) {
-        BookingCarRequest bookingCarRequest = bookingKafkaMessage.getBookingCarRequest();
-
-        // Set the authentication context
-        Authentication auth = new UsernamePasswordAuthenticationToken(bookingCarRequest.getCustomerEmail(), null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER")));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
-        // Rest of your code...
-        MultipartFile renterDriverLicense = null;
-        if(bookingKafkaMessage.getRenterDriverLicense() != null) {
-            renterDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverLicense(), "renterDriverLicense", "image/jpeg");
-        }
-        MultipartFile renterDriverDriverLicense = null;
-        if(bookingKafkaMessage.getRenterDriverDriverLicense() != null) {
-            renterDriverDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverDriverLicense(), "renterDriverDriverLicense", "image/jpeg");
-        }
-
-        // Call your existing bookCar method to handle booking logic
-        BookingCarResponse response = bookCar(bookingCarRequest, renterDriverLicense, renterDriverDriverLicense);
-
-        // Clear the authentication context
-        SecurityContextHolder.clearContext();
-
-        return response;
-    }
+//    @KafkaListener(topics = "bookings", groupId = "bookingGroup")
+//    @SendTo("bookingReplies")
+//    @Transactional(rollbackOn = {Exception.class, Error.class, Throwable.class, RuntimeException.class})
+//    public BookingCarResponse processBooking(BookingKafkaMessage bookingKafkaMessage) {
+//        BookingCarRequest bookingCarRequest = bookingKafkaMessage.getBookingCarRequest();
+//
+//        // Set the authentication context
+//        Authentication auth = new UsernamePasswordAuthenticationToken(bookingCarRequest.getCustomerEmail(), null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER")));
+//        SecurityContextHolder.getContext().setAuthentication(auth);
+//
+//        // Rest of your code...
+//        MultipartFile renterDriverLicense = null;
+//        if(bookingKafkaMessage.getRenterDriverLicense() != null) {
+//            renterDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverLicense(), "renterDriverLicense", "image/jpeg");
+//        }
+//        MultipartFile renterDriverDriverLicense = null;
+//        if(bookingKafkaMessage.getRenterDriverDriverLicense() != null) {
+//            renterDriverDriverLicense = new ByteArrayToMultipartFileConverter().convert(bookingKafkaMessage.getRenterDriverDriverLicense(), "renterDriverDriverLicense", "image/jpeg");
+//        }
+//
+//        // Call your existing bookCar method to handle booking logic
+//        BookingCarResponse response = bookCar(bookingCarRequest, renterDriverLicense, renterDriverDriverLicense);
+//
+//        // Clear the authentication context
+//        SecurityContextHolder.clearContext();
+//
+//        return response;
+//    }
     @Override
     public Page<ListBookingDto> getBookingsByCustomerId(Long customerId, Pageable pageable) {
         Page<ListBookingDto> bookings = bookingRepository.findByCustomerId(customerId, pageable);

@@ -36,7 +36,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
   kafka:
-    bootstrap-servers: 192.168.0.123:9092
+    bootstrap-servers: localhost:9092
     consumer:
       group-id: bookingGroup
       auto-offset-reset: earliest
