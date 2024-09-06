@@ -43,14 +43,14 @@ pipeline {
             }
         }
 
-        stage('Deploy Database') {
-            steps {
-                script {
-                    // Run SQL scripts to update database schema
-                    sh "sqlcmd -S $MSSQL_SERVER -d $MSSQL_DATABASE -U $MSSQL_USERNAME -P $MSSQL_PASSWORD -i RentalCar-BE/src/main/resources/init.sql"
-                }
-            }
-        }
+//         stage('Deploy Database') {
+//             steps {
+//                 script {
+//                     // Run SQL scripts to update database schema
+//                     sh "sqlcmd -S $MSSQL_SERVER -d $MSSQL_DATABASE -U $MSSQL_USERNAME -P $MSSQL_PASSWORD -i RentalCar-BE/src/main/resources/init.sql"
+//                 }
+//             }
+//         }
 
         stage('Deploy') {
             steps {
