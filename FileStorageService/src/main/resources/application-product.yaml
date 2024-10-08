@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: FileStorageService
+
+  datasource:
+    url: jdbc:postgresql://100.116.102.3:5432/filestorage_api?encrypt=true&trustServerCertificate=true&useUnicode=true&characterEncoding=UTF-8
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  cloud:
+    config:
+      import-check:
+        enabled: false
+      uri: http://localhost:8888
+      fail-fast: true
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+file:
+  upload-dir: D://
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  api-docs:
+    enabled: true
+    path: /v1/api-docs
+server:
+  port: 8082
