@@ -22,13 +22,18 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/filestorage_api</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="filestorage_api@192.168.169.126" uuid="6c1f5bf8-f0be-4877-95b4-a379fb913e0d">
+    <data-source source="LOCAL" name="filestorage_api@192.168.0.123" uuid="6c1f5bf8-f0be-4877-95b4-a379fb913e0d">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
       <remarks>$PROJECT_DIR$/FileStorageService/src/main/resources/application-product.yaml</remarks>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://192.168.169.126:5432/filestorage_api?encrypt=true&amp;trustServerCertificate=true&amp;useUnicode=true&amp;characterEncoding=UTF-8</jdbc-url>
+      <jdbc-url>jdbc:postgresql://192.168.0.123:5433/filestorage_api?encrypt=true&amp;trustServerCertificate=true&amp;useUnicode=true&amp;characterEncoding=UTF-8</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="com.intellij.clouds.kubernetes.db.host.port" />
+        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+        <property name="com.intellij.clouds.kubernetes.db.container.port" />
+      </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="sqlserver@localhost" uuid="73a72ce3-9dfc-4411-be87-1b9024bedadb">
